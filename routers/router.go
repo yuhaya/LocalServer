@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"CloudServer/controllers"
+	"LocalServer/controllers"
 	"github.com/astaxie/beego"
 )
 

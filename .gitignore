@@ -21,6 +21,7 @@ data.db
 
 _testmain.go
 Platform
+LocalServer
 
 *.exe
 *.test

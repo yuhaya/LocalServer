@@ -1,5 +1,9 @@
 package controllers
 
+import (
+	_ "LocalServer/models"
+)
+
 type MainController struct {
 	BaseController
 }

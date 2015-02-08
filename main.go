@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "CloudServer/routers"
+	_ "LocalServer/routers"
 	"github.com/astaxie/beego"
 )
 

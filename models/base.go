@@ -27,7 +27,10 @@ func Regist() {
 		new(System),
 		new(Users),
 		new(ClassTeacher),
-		new(Teachers))
+		new(Teachers),
+		new(Classes),
+		new(GradeClass),
+	)
 	orm.RegisterDriver("mysql", orm.DR_Sqlite) //注册数据库驱动
 	orm.RegisterDataBase("default", "sqlite3", "data.db")
 }
@@ -48,5 +51,5 @@ func createTable() {
 }
 
 func (this *Base) Demo() {
-	fmt.Println("hello world\n")
+	fmt.Println("hello world \n")
 }
