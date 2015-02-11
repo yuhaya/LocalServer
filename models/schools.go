@@ -15,5 +15,5 @@ type Schools struct {
 	Address    string    `orm:"size(80);null"`
 	UpdateTime time.Time `orm:"type(datetime)"`
 	DoorNum    int16     `orm:"default(1)"`
-	Enabled    byte      `orm:"default(1)"`
+	Enabled    int8      `orm:"default(1)"`
 }

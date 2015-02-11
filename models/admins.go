@@ -14,8 +14,8 @@ type Admins struct {
 	Realname   string    `orm:"size(50);null"`
 	SchoolGuid string    `orm:"size(50)" valid:"Required"`
 	CreateTime time.Time `orm:"type(datetime)" valid:"Required"`
-	Super      byte      `orm:"default(0)" valid:"Required;Range(0, 1)"`
-	Enabled    byte      `orm:"default(1)" valid:"Required;Range(0, 1)""`
+	Super      int8      `orm:"default(0)" valid:"Required;Range(0, 1)"`
+	Enabled    int8      `orm:"default(1)" valid:"Required;Range(0, 1)""`
 }
 
 func (this *Admins) Valid(v *validation.Validation) {

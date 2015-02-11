@@ -33,6 +33,11 @@
             示例模块
         </td>
     </tr>
+    <tr>
+        <td data-url="{{urlfor "CardController.Index"}}">
+            卡片管理
+        </td>
+    </tr>
 </table>
 <script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
 <script>

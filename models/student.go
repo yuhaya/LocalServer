@@ -10,7 +10,7 @@ type Students struct {
 	Sid         string    `orm:"size(50);null"`
 	Realname    string    `orm:"size(10)"`
 	Spell       string    `orm:"size(10)"`
-	Gender      byte      `orm:"default(1)"`
+	Gender      int8      `orm:"default(1)"`
 	Picture     string    `orm:"size(255);null"`
 	Birthday    time.Time `orm:"default(0000-00-00);type(date);"`
 	School_guid string    `orm:"size(50)"`

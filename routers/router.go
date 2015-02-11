@@ -11,4 +11,7 @@ func init() {
 	beego.Router("/frame/left", &controllers.MainController{}, "get:LeftBody")
 	beego.Router("/frame/right", &controllers.MainController{}, "get:RightBody")
 	beego.Router("/example", &controllers.ExampleController{}, "get:Index")
+	beego.Router("/card", &controllers.CardController{}, "get:Index")
+	beego.Router("/card/list", &controllers.CardController{}, "get:Manager")
+	beego.Router("/card/Show", &controllers.CardController{}, "get:Show")
 }

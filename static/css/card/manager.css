@@ -1,0 +1,15 @@
+#device_list li{
+    width: 500px;
+    padding: 5px 20px;
+    border: 1px solid #000;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+#device_list li span{
+    display: inline-block;
+    margin-right: 35px;
+}
+#device_list{
+    margin: 30px auto;
+    width: 500px;
+}
