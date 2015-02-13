@@ -9,7 +9,7 @@
 	  <div class="form-group">
 	    <div class="col-sm-10">
 	    	<div class="control-group">
-	      		<input type="text" class="form-control validate" name="search_condition" id="search_condition" data-rules="required"  placeholder="家庭成员姓名/成员手机号/家庭名称" data-display="搜索条件">
+	      		<input type="text" class="form-control validate" value="{{ .search_condition }}" name="search_condition" id="search_condition" data-rules="required"  placeholder="家庭成员姓名/成员手机号/家庭名称" data-display="搜索条件">
 	      		<p class="help-block"></p>
 			</div>
 	    </div>

@@ -6,15 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{.AppName}}</title>
-    <!-- Bootstrap -->
-    <link href="/static/css/lib/bootstrap.min.css" rel="stylesheet">
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="/static/js/lib/html5shiv.min.js"></script>
     <script src="/static/js/lib/respond.min.js"></script>
     <![endif]-->
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/static/js/lib/bootstrap-3.3.2/css/bootstrap.min.css">
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="/static/js/lib/bootstrap-3.3.2/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/lib/common.css"/>
     <link rel="stylesheet" href="/static/css/{{.ControllerName}}/{{.MethodName}}.css"/>
 </head>
@@ -27,14 +28,17 @@
 <div id="content">{{.LayoutContent}}</div>
 
 <script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
-<script type="application/javascript" src="/static/js/lib/bootstrap.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="/static/js/lib/bootstrap-3.3.2/js/bootstrap.min.js"></script>
 <script type="application/javascript" src="/static/js/lib/sea.js"></script>
 <script type="application/javascript">
     seajs.config({
 
         // 别名配置
         alias: {
-            'es5-safe': '/static/js/lib/es5-safe'
+            'es5-safe': '/static/js/lib/es5-safe',
+            'validate': '/static/js/lib/validate',
+            'validate_helper':'/static/js/lib/validate_helper'
         },
 
         // 路径配置

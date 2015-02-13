@@ -30,7 +30,7 @@
 <table id="main">
     <tr>
         <td style="width:180px;color: #ffffff;text-align: center">
-            <h2>Villa Manager</h2>
+            <h2>小叮当管理系统</h2>
             <p>ID : <span>{{.Name}}</span></p>
         </td>
         <td>

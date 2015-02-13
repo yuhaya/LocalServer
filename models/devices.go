@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"LocalServer/tool"
 )
 
 type Devices struct {
@@ -38,4 +39,22 @@ func (this *DevicesModel) UpdateAll() {
 		"Vmp": "armand",
 	})
 	fmt.Printf("Affected Num: %s, %s", num, err)
+}
+
+//生成测试数据
+func (this *DevicesModel) DemoData() {
+	o := orm.NewOrm()
+	device_model := new(Devices)
+	device_model.Guid = tool.Uuid()
+	device_model.Device = "127.150.10.1"
+	device_model.Kind = 1
+	device_model.Vmp = "test"
+	device_model.SchoolGuid = tool.Uuid()
+	device_model.Group = 1
+	device_model.Description = "出校门"
+	device_model.Status = 1
+	device_model.Enabled = 1
+	fmt.Printf("%v\n",device_model)
+	id, _ :=o.Insert(device_model)
+	fmt.Printf("%v\n",id)
 }

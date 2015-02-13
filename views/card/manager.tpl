@@ -8,7 +8,7 @@
     <div id="device_list">
 
         {{ if eq .num 0 }}
-            <div class="col-md-12">.col-md-6</div>
+            <div class="col-md-12">系统还未添加刷卡机设备</div>
         {{ else }}
                 {{range .device_list}}
                     <div class="row devices" data-id="{{ .Guid }}" data-href="{{ urlfor "CardController.Show" }}">

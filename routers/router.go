@@ -14,4 +14,5 @@ func init() {
 	beego.Router("/card", &controllers.CardController{}, "get:Index")
 	beego.Router("/card/list", &controllers.CardController{}, "get:Manager")
 	beego.Router("/card/Show", &controllers.CardController{}, "get:Show")
+	beego.Router("/card/Show", &controllers.CardController{}, "post:Search")
 }

@@ -42,3 +42,21 @@ func (this *CardController) Show() {
 func (this *CardController) init_register(card string) {
 
 }
+
+func (this *CardController) Search() {
+	search_condition := this.GetString("search_condition")
+
+	//检索家庭名称
+
+	//检索成员姓名
+
+	//检索成员手机号
+	
+	this.Data["search_condition"] = search_condition
+	this.TplNames = "card/search.tpl"
+}
+
+// func init() {
+// 	device := models.DevicesModel{}
+// 	device.DemoData() 
+// }

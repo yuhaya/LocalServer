@@ -125,3 +125,6 @@ table,table td,table th{
 	padding: 5px;
 	background-color: #F7F7F7;
 }
+.help-block{
+	color: red;
+}
