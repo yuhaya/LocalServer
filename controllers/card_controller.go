@@ -1,3 +1,8 @@
+// @APIVersion 1.0.0
+// @Title card API
+// @Description 卡号管理控制器
+// @Contact 3wmaocomputer@gmail.com
+
 package controllers
 
 import (
@@ -29,5 +34,11 @@ func (this *CardController) Manager() {
 }
 
 func (this *CardController) Show() {
-	//	card_guid = this.GetString("card")
+	card_guid := this.GetString("card")
+	this.init_register(card_guid)
+	this.TplNames = "card/show.tpl"
+}
+
+func (this *CardController) init_register(card string) {
+
 }

@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
     exports.init = function(){
+        manager()
     }
 
     function manager(){

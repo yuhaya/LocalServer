@@ -1,22 +1,31 @@
 <div id="con">
+    <div class="page-header">
+        <h1>卡片管理 <small>选择刷卡机</small></h1>
+    </div>
     {{ if ne .err "" }}
         {{.err}}
     {{ else }}
-    <ul id="device_list">
+    <div id="device_list">
+
         {{ if eq .num 0 }}
-             <li>未添加设备信息</li>
+            <div class="col-md-12">.col-md-6</div>
         {{ else }}
                 {{range .device_list}}
-                    <li data-id="{{ .Guid }}" class="devices" data-href="{{ urlfor "CardController.Show" }}">
-                    <span>序列号/IP:</span><span>{{ .Device }}</span><span>{{ .Description }}</span>
-                    {{ if eq .Status 1 }}
-                    <span>连接正常</span>
-                    {{ else }}
-                    <span>连接异常</span>
-                    {{ end }}
-                    </li>
+                    <div class="row devices" data-id="{{ .Guid }}" data-href="{{ urlfor "CardController.Show" }}">
+                        <div class="col-md-7">
+                                <span>序列号/IP:</span><span>{{ .Device }}</span>
+                        </div>
+                        <div class="col-md-3">{{ .Description }}</div>
+                        <div class="col-md-2">
+                            {{ if eq .Status 1 }}
+                                连接正常
+                            {{ else }}
+                                连接异常
+                            {{ end }}
+                        </div>
+                    </div>
                 {{end}}
         {{ end }}
-    </ul>
+    </div>
     {{ end }}
 </div>
