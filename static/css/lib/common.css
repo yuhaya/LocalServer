@@ -119,12 +119,7 @@ body{
 	background-color: #fff;
 	line-height: 20px;
 }
-table,table td,table th{
-	border: 2px solid #666;
-	border-collapse:collapse;
-	padding: 5px;
-	background-color: #F7F7F7;
-}
+
 .help-block{
 	color: red;
 }

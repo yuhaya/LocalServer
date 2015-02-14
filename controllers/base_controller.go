@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+const PAGE_NUM = 10
+
 type AjaxReturn struct {
 	Code bool
 	Msg  string

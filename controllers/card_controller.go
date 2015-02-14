@@ -7,6 +7,7 @@ package controllers
 
 import (
 	"LocalServer/models"
+	"fmt"
 )
 
 type CardController struct {
@@ -40,23 +41,32 @@ func (this *CardController) Show() {
 }
 
 func (this *CardController) init_register(card string) {
-
 }
 
 func (this *CardController) Search() {
 	search_condition := this.GetString("search_condition")
 
-	//检索家庭名称
+	fmt.Println(search_condition)
 
+	familiy_model := new(models.FamiliyModel)
+	//检索家庭名称
+	res_fm_name := familiy_model.GetListByFamlilyName(search_condition)
+	fmt.Printf("%v==\n", res_fm_name)
+	this.Data["search_by_familiy"] = res_fm_name
 	//检索成员姓名
+	res_u_name := familiy_model.GetListByUserName(search_condition)
+	fmt.Printf("%v==\n", res_fm_name)
+	this.Data["search_by_user"] = res_u_name
 
 	//检索成员手机号
-	
+	res_u_phone := familiy_model.GetListByUserPhone(search_condition)
+	this.Data["search_by_phone"] = res_u_phone
+
 	this.Data["search_condition"] = search_condition
 	this.TplNames = "card/search.tpl"
 }
 
-// func init() {
-// 	device := models.DevicesModel{}
-// 	device.DemoData() 
-// }
+//func init() {
+//	device := models.DevicesModel{}
+//	device.DemoData()
+//}

@@ -17,3 +17,10 @@ type Schools struct {
 	DoorNum    int16     `orm:"default(1)"`
 	Enabled    int8      `orm:"default(1)"`
 }
+
+type SchoolModel struct {
+}
+
+func (this *SchoolModel) GetSchoolGuid() string {
+	return "76160821-c8d4-483e-a041-2e551888a651"
+}

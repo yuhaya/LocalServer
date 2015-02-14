@@ -10,10 +10,11 @@
             padding: 0px;
         }
         body{
-            background-color: #000000;
+            background-color: #fff;
+            font: 15px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
         }
         #list{
-            color: #ffffff;
+            color: #000;
         }
         #list td{
             cursor: pointer;
@@ -31,6 +32,11 @@
     <tr>
         <td data-url="{{urlfor "ExampleController.Index"}}">
             示例模块
+        </td>
+    </tr>
+    <tr>
+        <td data-url="{{urlfor "FamilyController.Index"}}">
+            家庭管理
         </td>
     </tr>
     <tr>
