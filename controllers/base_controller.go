@@ -2,12 +2,23 @@ package controllers
 
 import (
 	// "encoding/json"
+	//	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/beego/i18n"
 	"regexp"
 	"strings"
 	"text/template"
 	"time"
 )
+
+const PAGE_NUM = 10
+
+// langType represents a language type.
+type langType struct {
+	Lang, Name string
+}
+
+//var langTypes []*langType // Languages are supported.
 
 type AjaxReturn struct {
 	Code string
@@ -21,6 +32,7 @@ type NestPreparer interface {
 
 type BaseController struct {
 	beego.Controller
+	i18n.Locale
 }
 
 // Prepare implemented Prepare method for baseRouter.
@@ -38,6 +50,7 @@ func (this *BaseController) Prepare() {
 	this.Data["AppLogo"] = beego.AppConfig.String("AppLogo")
 	this.Data["IsProMode"] = beego.AppConfig.String("IsProMode")
 	this.Data["TitleName"] = ""
+	this.setLangVer()
 
 	controllerName, methodName := this.GetControllerAndAction()
 	reg := regexp.MustCompile(`Controller`)
@@ -74,4 +87,71 @@ func (this *BaseController) OutputMsg(msg string, urlmsg map[string]string) {
 	data["content"] = msg
 	data["urlmsg"] = urlmsg
 	t.Execute(this.Ctx.ResponseWriter, data)
+}
+
+// setLangVer sets site language version.
+func (this *BaseController) setLangVer() bool {
+	isNeedRedir := false
+	hasCookie := false
+
+	// 1. Check URL arguments.
+	lang := this.Input().Get("lang")
+
+	// 2. Get language information from cookies.
+	if len(lang) == 0 {
+		lang = this.Ctx.GetCookie("lang")
+		hasCookie = true
+	} else {
+		isNeedRedir = true
+	}
+
+	// Check again in case someone modify by purpose.
+	if !i18n.IsExist(lang) {
+		lang = ""
+		isNeedRedir = false
+		hasCookie = false
+	}
+
+	// 3. Get language information from 'Accept-Language'.
+	if len(lang) == 0 {
+		al := this.Ctx.Request.Header.Get("Accept-Language")
+		if len(al) > 4 {
+			al = al[:5] // Only compare first 5 letters.
+			if i18n.IsExist(al) {
+				lang = al
+			}
+		}
+	}
+
+	// 4. Default language is English.
+	if len(lang) == 0 {
+		lang = "zh-CN"
+		isNeedRedir = false
+	}
+
+	curLang := langType{
+		Lang: lang,
+	}
+
+	// Save language information in cookies.
+	if !hasCookie {
+		this.Ctx.SetCookie("lang", curLang.Lang, 1<<31-1, "/")
+	}
+
+	//	restLangs := make([]*langType, 0, len(langTypes)-1)
+	//	for _, v := range langTypes {
+	//		if lang != v.Lang {
+	//			restLangs = append(restLangs, v)
+	//		} else {
+	//			curLang.Name = v.Name
+	//		}
+	//	}
+
+	// Set language properties.
+	this.Lang = lang
+	this.Data["Lang"] = curLang.Lang
+
+	this.Data["CurLang"] = curLang.Name
+	//	this.Data["RestLangs"] = restLangs
+	return isNeedRedir
 }

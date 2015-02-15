@@ -10,7 +10,9 @@
             margin: 0px;
         }
         body{
-            background-color: #000000;
+            background-color: #f5f5f5;
+            font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+            color: #333;
         }
         #main{
             width: 100%;
@@ -20,7 +22,7 @@
             height: 25px;
             line-height: 25px;
             border: 0px;
-            color: #fff;
+            color: #333;
             background-color: #000000;
             cursor: pointer;
         }
@@ -29,8 +31,8 @@
 <body>
 <table id="main">
     <tr>
-        <td style="width:180px;color: #ffffff;text-align: center">
-            <h2>Villa Manager</h2>
+        <td style="width:180px;text-align: center">
+            <h2>小叮当管理系统</h2>
             <p>ID : <span>{{.Name}}</span></p>
         </td>
         <td>

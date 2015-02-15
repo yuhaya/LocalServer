@@ -26,3 +26,7 @@ LocalServer
 *.exe
 *.test
 *.prof
+
+models/base.go
+
+*.css
