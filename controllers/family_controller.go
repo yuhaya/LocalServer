@@ -9,6 +9,8 @@ package controllers
 import (
 	"LocalServer/models"
 	"LocalServer/tool"
+	"fmt"
+	"github.com/astaxie/beego/utils/pagination"
 	"time"
 )
 
@@ -21,9 +23,13 @@ func (this *FamilyController) Index() {
 	if err != nil || page < 1 {
 		page = 1
 	}
-	offset := (page - 1) * PAGE_NUM
 	familiy_model := models.FamiliyModel{}
-	data, num := familiy_model.GetAllPage(offset, PAGE_NUM)
+
+	postsPerPage := PAGE_NUM
+	fmt.Printf("%d====\n", familiy_model.CountAll())
+	paginator := pagination.SetPaginator(this.Ctx, postsPerPage, familiy_model.CountAll())
+	data, num := familiy_model.GetAllPage(paginator.Offset(), PAGE_NUM)
+	this.Data["paginator"] = paginator
 	this.Data["list"] = data
 	this.Data["num"] = num
 	this.TplNames = "family/index.tpl"

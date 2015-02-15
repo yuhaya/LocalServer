@@ -4,6 +4,7 @@ import (
 	"LocalServer/tool"
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"strconv"
 )
 
 type Families struct {
@@ -126,5 +127,35 @@ func (this *FamiliyModel) AddFamily(family_model *Families, user_model *Users) b
 		return true
 	} else {
 		return false
+	}
+}
+
+/**
+ * 返回所有的家庭总数
+ */
+func (this *FamiliyModel) CountAll() int64 {
+	o := orm.NewOrm()
+	sql := `SELECT COUNT(*) as total FROM ittr_families`
+	r := o.Raw(sql)
+	var res []orm.Params
+	num, err := r.Values(&res)
+	total := res[0]["total"]
+
+	fmt.Printf("%v======\n", total)
+	if err == nil && num > 0 {
+		if val_str, ok := total.(string); ok {
+
+			b, error := strconv.Atoi(val_str)
+			if error == nil {
+				return int64(b)
+			} else {
+				return 0
+			}
+
+		} else {
+			return 0
+		}
+	} else {
+		return 0
 	}
 }

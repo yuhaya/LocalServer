@@ -16,5 +16,5 @@ func init() {
 	beego.Router("/card/Show", &controllers.CardController{}, "get:Show")
 	beego.Router("/card/Show", &controllers.CardController{}, "post:Search")
 	beego.Router("/family", &controllers.FamilyController{}, "get:Index")
-	beego.Router("/add", &controllers.FamilyController{}, "get:Add;post:AddSubmit")
+	beego.Router("/family/add", &controllers.FamilyController{}, "get:Add;post:AddSubmit")
 }
