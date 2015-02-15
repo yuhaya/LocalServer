@@ -5,5 +5,5 @@ type ExampleController struct {
 }
 
 func (this *ExampleController) Index() {
-	this.TplNames = "example/index.tpl"
+    this.TplNames = "example/index.tpl"
 }

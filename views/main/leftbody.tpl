@@ -33,6 +33,16 @@
             示例模块
         </td>
     </tr>
+    <tr>
+        <td data-url="{{urlfor "GradeController.Show"}}">
+            幼儿园总览
+        </td>
+    </tr>
+    <tr>
+        <td data-url="{{urlfor "GradeController.Index"}}">
+            幼儿园管理
+        </td>
+    </tr>
 </table>
 <script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
 <script>

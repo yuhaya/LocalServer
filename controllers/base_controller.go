@@ -10,7 +10,7 @@ import (
 )
 
 type AjaxReturn struct {
-	Code bool
+	Code string
 	Msg  string
 	Data interface{}
 }
@@ -52,9 +52,11 @@ func (this *BaseController) Prepare() {
 	if app, ok := this.AppController.(NestPreparer); ok {
 		app.NestPrepare()
 	}
+
+
 }
 
-func (this *BaseController) AjaxReturnFun(code bool, msg string, data interface{}) {
+func (this *BaseController) AjaxReturnFun(code string, msg string, data interface{}) {
 	m := AjaxReturn{code, msg, data}
 	this.Data["json"] = &m
 	this.ServeJson()
