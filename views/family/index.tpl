@@ -26,7 +26,7 @@
         <td>{{$value.user_realname}}</td>
         <td>{{$value.user_phone}}</td>
         <td style="width: 700px">
-            <input type="button" value="编辑" class="btn btn-primary"/>
+            <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.guid}}'" value="编辑" class="btn btn-primary"/>
             <input type="button" value="管理家庭成员" class="btn btn-primary"/>
             <input type="button" value="家庭成员关系" class="btn btn-primary"/>
             <input type="button" value="家庭成员卡号绑定" class="btn btn-primary"/>

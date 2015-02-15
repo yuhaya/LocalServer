@@ -81,3 +81,21 @@ func (this *FamilyController) AddSubmit() {
 	}
 
 }
+
+/**
+ * 编辑家庭
+ */
+func (this *FamilyController) EditFamily() {
+	family_guid := this.GetString("guid")
+	family_model := models.FamiliyModel{}
+	fm := family_model.GetFamilyByGuid(family_guid)
+	this.Data["fm"] = fm
+	this.TplNames = "family/edit.tpl"
+}
+
+/**
+ * 编辑家庭提交
+ */
+func (this *FamilyController) EditSubmit() {
+	//	family_name := this.GetString("family_name")
+}

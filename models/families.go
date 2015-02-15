@@ -16,6 +16,7 @@ type Families struct {
 }
 
 type FamiliyModel struct {
+	Base
 }
 
 /**
@@ -158,4 +159,16 @@ func (this *FamiliyModel) CountAll() int64 {
 	} else {
 		return 0
 	}
+}
+
+/**
+ * 依靠guid检索一个家庭对象
+ */
+func (this *FamiliyModel) GetFamilyByGuid(guid string) *Families {
+	o := orm.NewOrm()
+	qs := o.QueryTable(new(Families))
+	qs.Filter("guid", guid)
+	var fm Families
+	qs.One(&fm)
+	return &fm
 }
