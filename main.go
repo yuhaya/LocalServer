@@ -12,3 +12,4 @@ func main() {
 	orm.Debug = true
 	beego.Run()
 }
+

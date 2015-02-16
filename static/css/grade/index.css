@@ -1,0 +1,48 @@
+.main {
+    margin-top: 20px;
+}
+
+.panel-head-title {
+    width: 100%;
+    list-style: none !important;
+    padding-bottom: 25px;
+}
+
+.panel-head-title li {
+    width: auto;
+    float: left !important;
+}
+
+.panel-head-title button {
+    position: absolute;
+    right: 30px;
+}
+
+.panel-head-title .btn-group {
+    position: absolute;
+    right: -15px;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.input-group-name {
+    margin-bottom: 20px;
+}
+
+.grade-save {
+    width: 100% !important;
+}
+
+.class-title {
+    margin-bottom: -15px !important;
+}
+
+.class-table td{
+    padding-left: 15px !important;
+}
+.tb-class td{
+    border: none !important;
+    vertical-align: middle !important;
+}

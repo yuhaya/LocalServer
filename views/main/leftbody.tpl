@@ -10,11 +10,10 @@
             padding: 0px;
         }
         body{
-            background-color: #fff;
-            font: 15px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #000000;
         }
         #list{
-            color: #000;
+            color: #ffffff;
         }
         #list td{
             cursor: pointer;
@@ -35,13 +34,13 @@
         </td>
     </tr>
     <tr>
-        <td data-url="{{urlfor "FamilyController.Index"}}">
-            家庭管理
+        <td data-url="{{urlfor "GradeController.Show"}}">
+            幼儿园总览
         </td>
     </tr>
     <tr>
-        <td data-url="{{urlfor "CardController.Index"}}">
-            卡片管理
+        <td data-url="{{urlfor "GradeController.Index"}}">
+            幼儿园管理
         </td>
     </tr>
 </table>

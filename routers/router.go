@@ -19,4 +19,20 @@ func init() {
 	beego.Router("/family/add", &controllers.FamilyController{}, "get:Add;post:AddSubmit")
 	beego.Router("/family/edit", &controllers.FamilyController{}, "get:EditFamily;post:EditSubmit")
 	beego.Router("/family/members", &controllers.FamilyController{}, "get:ManagerMember")
+	grade()
+	class()
+}
+
+func grade() {
+	beego.Router("/grade/show", &controllers.GradeController{}, "get:Show")
+	beego.Router("/grade", &controllers.GradeController{}, "get:Index")
+	beego.Router("/grade/create", &controllers.GradeController{}, "post:Create")
+	beego.Router("/grade/delete", &controllers.GradeController{}, "post:Delete")
+	beego.Router("/grade/update", &controllers.GradeController{}, "post:Update")
+}
+
+func class() {
+	beego.Router("/class/list", &controllers.ClassController{}, "post:Index")
+	beego.Router("/class/create", &controllers.ClassController{}, "post:Create")
+	beego.Router("/class/delete", &controllers.ClassController{}, "post:Delete")
 }
