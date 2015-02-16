@@ -112,12 +112,13 @@ func (this *FamiliyModel) GetAllPage(offset int, page int) ([]orm.Params, int64)
 /**
  * 添加一个家庭
  */
-func (this *FamiliyModel) AddFamily(family_model *Families, user_model *Users) bool {
+func (this *FamiliyModel) AddFamily(family_model *Families, user_model *Users, family_member_model *FamilyMember) bool {
 
 	o := orm.NewOrm()
 	err := o.Begin()
 	o.Insert(family_model)
 	o.Insert(user_model)
+	o.Insert(family_member_model)
 	var err2 error
 	if err == nil {
 		err2 = o.Commit()
@@ -167,8 +168,56 @@ func (this *FamiliyModel) CountAll() int64 {
 func (this *FamiliyModel) GetFamilyByGuid(guid string) *Families {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(Families))
-	qs.Filter("guid", guid)
 	var fm Families
-	qs.One(&fm)
+	qs.Filter("guid", guid).One(&fm)
 	return &fm
+}
+
+/**
+ * 更新家庭的名称
+ */
+func (this *FamiliyModel) UpdateFamilyNameByGuid(guid string, name string) bool {
+	o := orm.NewOrm()
+	num, err := o.QueryTable(new(Families)).Filter("guid", guid).Update(orm.Params{
+		"name": name,
+	})
+	if num != 0 && err == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
+/**
+ * 根据guid获取所有的家庭成员
+ */
+func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]orm.Params, string) {
+
+	o := orm.NewOrm()
+	var res map[string][]orm.Params
+	//获取所有的家长成
+	qs := o.QueryTable(new(Families))
+	var fm Families
+	qs.Filter("guid", guid).One(&fm, "FirstGuid")
+	first_guid := fm.FirstGuid
+
+	res["users"] = make([]orm.Params, 0)
+	res["stus"] = make([]orm.Params, 0)
+
+	var user_maps []orm.Params
+	sql := `SELECT u.* FROM ittr_member AS m INNER JOIN ittr_users AS u
+				ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 1`
+	r := o.Raw(sql, guid)
+	r.Values(&user_maps)
+	res["users"] = user_maps
+
+	var stu_maps []orm.Params
+	stu_sql := `SELECT u.* FROM ittr_member AS m INNER JOIN ittr_students AS u
+				ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 0`
+	stu_r := o.Raw(stu_sql, guid)
+	stu_r.Values(&stu_maps)
+	res["stus"] = stu_maps
+
+	return res, first_guid
+
 }
