@@ -188,35 +188,57 @@ func (this *FamiliyModel) UpdateFamilyNameByGuid(guid string, name string) bool 
 	}
 }
 
+type result struct {
+	Users
+}
+
 /**
  * 根据guid获取所有的家庭成员
  */
-func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]orm.Params, string) {
+func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]*result, string) {
 
 	o := orm.NewOrm()
-	var res map[string][]orm.Params
+	var res map[string][]*result
+	res = make(map[string][]*result)
+
 	//获取所有的家长成
 	qs := o.QueryTable(new(Families))
 	var fm Families
 	qs.Filter("guid", guid).One(&fm, "FirstGuid")
 	first_guid := fm.FirstGuid
 
-	res["users"] = make([]orm.Params, 0)
-	res["stus"] = make([]orm.Params, 0)
-
-	var user_maps []orm.Params
+	//家长数据
+	var user_maps []result
 	sql := `SELECT u.* FROM ittr_member AS m INNER JOIN ittr_users AS u
-				ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 1`
+					ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 1`
 	r := o.Raw(sql, guid)
-	r.Values(&user_maps)
-	res["users"] = user_maps
+	num, err := r.QueryRows(&user_maps)
 
-	var stu_maps []orm.Params
+	if err == nil && num != 0 {
+		res["users"] = make([]*result, num)
+		for index, value := range user_maps {
+			res["users"][index] = &value
+		}
+	} else {
+		res["users"] = make([]*result, 0)
+	}
+
+	//学生数据
+	var stu_maps []result
 	stu_sql := `SELECT u.* FROM ittr_member AS m INNER JOIN ittr_students AS u
 				ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 0`
 	stu_r := o.Raw(stu_sql, guid)
-	stu_r.Values(&stu_maps)
-	res["stus"] = stu_maps
+	stu_num, stu_err := stu_r.QueryRows(&stu_maps)
+
+	if stu_err == nil && stu_num != 0 {
+
+		res["stus"] = make([]*result, stu_num)
+		for index, value := range user_maps {
+			res["stus"][index] = &value
+		}
+	} else {
+		res["stus"] = make([]*result, 0)
+	}
 
 	return res, first_guid
 
