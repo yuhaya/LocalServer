@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strconv"
+	"time"
 )
 
 type Families struct {
@@ -189,7 +190,13 @@ func (this *FamiliyModel) UpdateFamilyNameByGuid(guid string, name string) bool 
 }
 
 type result struct {
-	Users
+	Id         uint64
+	Guid       string
+	Phone      string
+	Realname   string
+	Spell      string
+	Gender     int8
+	CreateTime time.Time
 }
 
 /**
@@ -209,15 +216,14 @@ func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]*result, s
 
 	//家长数据
 	var user_maps []result
-	sql := `SELECT u.* FROM ittr_member AS m INNER JOIN ittr_users AS u
-					ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 1`
+	sql := "SELECT u.* FROM ittr_family_member AS m INNER JOIN ittr_users AS u ON m.member_guid = u.guid where m.family_guid = ? AND m.type = 1"
 	r := o.Raw(sql, guid)
 	num, err := r.QueryRows(&user_maps)
 
 	if err == nil && num != 0 {
 		res["users"] = make([]*result, num)
-		for index, value := range user_maps {
-			res["users"][index] = &value
+		for index, _ := range user_maps {
+			res["users"][index] = &user_maps[index]
 		}
 	} else {
 		res["users"] = make([]*result, 0)
@@ -225,16 +231,15 @@ func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]*result, s
 
 	//学生数据
 	var stu_maps []result
-	stu_sql := `SELECT u.* FROM ittr_member AS m INNER JOIN ittr_students AS u
-				ON m.member_guid = u.guid where m.familyguid = ? AND m.type = 0`
+	stu_sql := `SELECT u.* FROM ittr_family_member AS m INNER JOIN ittr_students AS u ON m.member_guid = u.guid where m.family_guid = ? AND m.type = 0`
 	stu_r := o.Raw(stu_sql, guid)
 	stu_num, stu_err := stu_r.QueryRows(&stu_maps)
 
 	if stu_err == nil && stu_num != 0 {
 
 		res["stus"] = make([]*result, stu_num)
-		for index, value := range user_maps {
-			res["stus"][index] = &value
+		for index, _ := range stu_maps {
+			res["stus"][index] = &stu_maps[index]
 		}
 	} else {
 		res["stus"] = make([]*result, 0)
@@ -242,4 +247,28 @@ func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]*result, s
 
 	return res, first_guid
 
+}
+
+/**
+ * 给一个家庭添加家长
+ */
+func (this *FamiliyModel) AddUser(user_model *Users, family_member_model *FamilyMember) bool {
+
+	o := orm.NewOrm()
+	err := o.Begin()
+
+	o.Insert(user_model)
+	o.Insert(family_member_model)
+
+	var err2 error
+	if err == nil {
+		err2 = o.Commit()
+	} else {
+		err2 = o.Rollback()
+	}
+	if err == nil && err2 == nil {
+		return true
+	} else {
+		return false
+	}
 }

@@ -12,10 +12,10 @@ type Students struct {
 	Spell       string    `orm:"size(10)"`
 	Gender      int8      `orm:"default(1)"`
 	Picture     string    `orm:"size(255);null"`
-	Birthday    time.Time `orm:"default(0000-00-00);type(date);"`
-	School_guid string    `orm:"size(50)"`
-	Grade_guid  string    `orm:"size(50)"`
-	Classname   string    `orm:"size(20);null"`
-	Enrol_time  time.Time `orm:"default(0000-00-00);type(date);"`
+	Birthday    time.Time `orm:"default(0000-00-00);type(date);" form:"Birthday,2006-01-02"`
+	School_guid string    `orm:"size(50);null"`
+	Grade_guid  string    `orm:"size(50);null"`
+	Class_guid  string    `orm:"size(20);null"`
+	Enrol_time  time.Time `orm:"default(0000-00-00);type(date);" form:"Enrol_time,2006-01-02"`
 	Create_time time.Time `orm:"type(datetime)"`
 }

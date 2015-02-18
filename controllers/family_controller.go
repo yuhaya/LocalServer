@@ -118,7 +118,7 @@ func (this *FamilyController) EditSubmit() {
 	if flag {
 		this.OutputMsg("修改成功！", urlmsg)
 	} else {
-		this.OutputMsg("修改失败！", urlmsg)
+		this.OutputMsg("修改失败! ", urlmsg)
 	}
 }
 
@@ -130,6 +130,79 @@ func (this *FamilyController) ManagerMember() {
 	fm := models.FamiliyModel{}
 	members, main_guid := fm.GetMembersByGuid(family_guid)
 	this.Data["members"] = members
+	this.Data["users"] = members["users"]
+	fmt.Printf("%v==xxxxxxxxxxxx", members["users"])
 	this.Data["main_guid"] = main_guid
+	this.Data["family_guid"] = family_guid
 	this.TplNames = "family/member.tpl"
+}
+
+/**
+ * 添加家庭成员显示页面
+ */
+func (this *FamilyController) AddMemberShow() {
+	memeber_type := this.GetString("memeber_type")
+	family_guid := this.GetString("family_guid")
+	this.Data["memeber_type"] = memeber_type
+	this.Data["family_guid"] = family_guid
+
+	if memeber_type == "stu" {
+		//添加学生
+		grades := models.Grades.GetAll()
+		this.Data["grades"] = grades
+		this.TplNames = "family/addstu.tpl"
+	} else {
+		//添加家长
+		this.TplNames = "family/adduser.tpl"
+	}
+}
+
+/**
+ * 添加家庭成员
+ */
+func (this *FamilyController) AddMember() {
+
+	memeber_type := this.GetString("memeber_type")
+	family_guid := this.GetString("family_guid")
+
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+
+	if memeber_type == "stu" {
+
+		urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=stu&family_guid=" + family_guid
+		//添加学生
+
+	} else {
+
+		urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=user&family_guid=" + family_guid
+		//添加家长
+		user_model := models.Users{}
+
+		if err := this.ParseForm(&user_model); err != nil {
+			//handle error
+
+			this.OutputMsg(err.Error(), urlmsg)
+		} else {
+			user_model.CreateTime = time.Now()
+			user_guid := tool.Uuid()
+			user_model.Guid = user_guid
+			school_model := models.SchoolModel{}
+			user_model.SchoolGuid = school_model.GetSchoolGuid()
+
+			family_member := models.FamilyMember{}
+			family_member.FamilyGuid = family_guid
+			family_member.MemberGuid = user_guid
+			family_member.Type = 1
+
+			family_model := models.FamiliyModel{}
+			flag := family_model.AddUser(&user_model, &family_member)
+
+			if flag {
+				this.OutputMsg("添加成功", urlmsg)
+			} else {
+				this.OutputMsg("添加失败", urlmsg)
+			}
+		}
+	}
 }

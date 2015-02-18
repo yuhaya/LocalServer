@@ -19,6 +19,7 @@ func init() {
 	beego.Router("/family/add", &controllers.FamilyController{}, "get:Add;post:AddSubmit")
 	beego.Router("/family/edit", &controllers.FamilyController{}, "get:EditFamily;post:EditSubmit")
 	beego.Router("/family/members", &controllers.FamilyController{}, "get:ManagerMember")
+	beego.Router("/family/members/user/add", &controllers.FamilyController{}, "get:AddMemberShow;post:AddMember")
 	grade()
 	class()
 }
