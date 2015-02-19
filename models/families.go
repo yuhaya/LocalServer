@@ -272,3 +272,27 @@ func (this *FamiliyModel) AddUser(user_model *Users, family_member_model *Family
 		return false
 	}
 }
+
+/**
+ * 添加一个学生
+ */
+func (this *FamiliyModel) AddStu(stu_model *Students, family_member_model *FamilyMember) bool {
+
+	o := orm.NewOrm()
+	err := o.Begin()
+
+	o.Insert(stu_model)
+	o.Insert(family_member_model)
+
+	var err2 error
+	if err == nil {
+		err2 = o.Commit()
+	} else {
+		err2 = o.Rollback()
+	}
+	if err == nil && err2 == nil {
+		return true
+	} else {
+		return false
+	}
+}

@@ -9,6 +9,7 @@ package controllers
 import (
 	"LocalServer/models"
 	"LocalServer/tool"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/utils/pagination"
 	"time"
@@ -148,8 +149,16 @@ func (this *FamilyController) AddMemberShow() {
 
 	if memeber_type == "stu" {
 		//添加学生
-		grades := models.Grades.GetAll()
-		this.Data["grades"] = grades
+		grade_class, grade := models.GetAllGradeClass()
+		grade_class_json, err := json.Marshal(grade_class)
+		if err == nil && len(grade_class) != 0 {
+			this.Data["grade_class_json"] = string(grade_class_json)
+		} else {
+			this.Data["grade_class_json"] = "{}"
+		}
+		fmt.Printf("\n%v======%s\n", grade_class, grade_class_json)
+
+		this.Data["grades"] = grade
 		this.TplNames = "family/addstu.tpl"
 	} else {
 		//添加家长
@@ -172,6 +181,33 @@ func (this *FamilyController) AddMember() {
 
 		urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=stu&family_guid=" + family_guid
 		//添加学生
+
+		stu_model := models.Students{}
+		if err := this.ParseForm(&stu_model); err != nil {
+			//handle error
+
+			this.OutputMsg(err.Error(), urlmsg)
+		} else {
+			stu_model.Create_time = time.Now()
+			stu_guid := tool.Uuid()
+			stu_model.Guid = stu_guid
+			school_model := models.SchoolModel{}
+			stu_model.School_guid = school_model.GetSchoolGuid()
+
+			family_member := models.FamilyMember{}
+			family_member.FamilyGuid = family_guid
+			family_member.MemberGuid = stu_guid
+			family_member.Type = 0
+
+			family_model := models.FamiliyModel{}
+			flag := family_model.AddStu(&stu_model, &family_member)
+
+			if flag {
+				this.OutputMsg("添加成功", urlmsg)
+			} else {
+				this.OutputMsg("添加失败", urlmsg)
+			}
+		}
 
 	} else {
 

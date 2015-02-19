@@ -55,3 +55,8 @@
 </div>
 <div class="col-md-3"></div>
 </div>
+<script>
+var data = {
+    type:"{{.memeber_type}}"
+}
+</script>

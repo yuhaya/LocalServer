@@ -12,7 +12,7 @@
 
     <div class="form-group control-group">
         <label for="Realname">学生姓名</label>
-        <input type="text" class="form-control validate" data-display="主家长名称" data-rules="required|max_length[10]"  name="Realname" id="Realname" placeholder="Realname">
+        <input type="text" class="form-control validate" data-display="学生名称" data-rules="required|max_length[10]"  name="Realname" id="Realname" placeholder="Realname">
         <p class="help-block"></p>
     </div>
     <div class="form-group control-group">
@@ -23,6 +23,25 @@
     <div class="form-group control-group">
         <label for="Spell">姓名拼音</label>
         <input type="text" class="form-control validate" data-display="姓名拼音" data-rules="required|max_length[10]"  name="Spell" id="Spell" placeholder="Spell">
+        <p class="help-block"></p>
+    </div>
+
+
+    <div class="form-group control-group">
+        <label for="Grade_guid">年级</label>
+        <select name="Grade_guid" class="form-control validate"  id="Grade_guid" data-display="年级" data-rules="required" >
+            {{ range .grades}}
+            <option value="{{.guid}}">{{.name}}</option>
+            {{ end }}
+        </select>
+        <p class="help-block"></p>
+    </div>
+
+    <div class="form-group control-group">
+        <label for="Class_guid">班级</label>
+        <select name="Class_guid" class="form-control validate"  id="Class_guid" data-display="班级" data-rules="required" >
+            <option value="">选择班级</option>
+        </select>
         <p class="help-block"></p>
     </div>
 
@@ -62,3 +81,10 @@
 </div>
 <div class="col-md-3"></div>
         </div>
+
+<script>
+var data = {
+    grade_class : '{{.grade_class_json}}',
+    type:"{{.memeber_type}}"
+}
+</script>

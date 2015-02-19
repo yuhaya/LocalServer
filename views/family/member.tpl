@@ -35,7 +35,7 @@
     <th>
         成员身份
     </th>
-    <th>
+    <th style="width: 200px">
         操作
     </th>
 </tr>
@@ -84,6 +84,7 @@
     <td>学生</td>
     <td style="width: 700px">
         <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.Guid}}'" value="编辑" class="btn btn-primary"/>
+        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.Guid}}'" value="查看" class="btn btn-primary"/>
     </td>
 </tr>
 {{end}}
