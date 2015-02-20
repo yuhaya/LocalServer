@@ -132,7 +132,6 @@ func (this *FamilyController) ManagerMember() {
 	members, main_guid := fm.GetMembersByGuid(family_guid)
 	this.Data["members"] = members
 	this.Data["users"] = members["users"]
-	fmt.Printf("%v==xxxxxxxxxxxx", members["users"])
 	this.Data["main_guid"] = main_guid
 	this.Data["family_guid"] = family_guid
 	this.TplNames = "family/member.tpl"
@@ -241,4 +240,39 @@ func (this *FamilyController) AddMember() {
 			}
 		}
 	}
+}
+
+/**
+ * 编辑家长
+ */
+func (this *FamilyController) EditUser() {
+
+}
+
+/**
+ * 编辑家长
+ */
+func (this *FamilyController) ShowUser() {
+
+}
+
+/**
+ * 编辑学生
+ */
+func (this *FamilyController) EditStu() {
+
+}
+
+/**
+ * 查看学生详情
+ */
+func (this *FamilyController) ShowStu() {
+
+}
+
+/**
+ * set main parent
+ */
+func (this *FamilyController) SetMainUser() {
+
 }

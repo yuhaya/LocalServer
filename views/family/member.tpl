@@ -63,7 +63,7 @@
         <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{.Guid}}'" value="编辑" class="btn btn-primary"/>
         <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{.Guid}}'" value="查看" class="btn btn-primary"/>
         {{ if ne .Guid $.main_guid}}
-            <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{.Guid}}'" value="设为主家长" class="btn btn-primary"/>
+            <input type="button"  data-url="{{urlfor "FamilyController.SetMainUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="设为主家长" class="main_parent btn btn-primary"/>
         {{ end }}
     </td>
 </tr>

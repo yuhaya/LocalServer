@@ -11,4 +11,21 @@ define(function(require, exports, module) {
         //form.validate(function($form, e){  })
     }
 
+    /**
+     * 设置主家长
+     */
+    function set_main(){
+        $(".main_parent").click(function(){
+            var url = $(this).attr("data-url")
+            $.ajax({
+                url:url,
+                type:"POST",
+                dataType:"json",
+                success:function(data){
+                    
+                }
+            })
+        })
+    }
+
 });
