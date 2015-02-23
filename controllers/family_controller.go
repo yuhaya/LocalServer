@@ -294,6 +294,17 @@ func (this *FamilyController) EditUser() {
  */
 func (this *FamilyController) ShowUser() {
 
+	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
+	this.Data["family_guid"] = family_guid
+	this.Data["memeber_type"] = "user"
+	this.Data["guid"] = guid
+	var user models.Users
+	err := user.GetUserByGuid(guid)
+	if err != nil {
+		//日志记录
+	}
+	this.Data["user"] = &user
 	this.TplNames = "family/showuser.tpl"
 }
 
