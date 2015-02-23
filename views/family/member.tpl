@@ -60,8 +60,8 @@
         {{ end }}
     </td>
     <td style="width: 300px">
-        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{.Guid}}'" value="编辑" class="btn btn-primary"/>
-        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{.Guid}}'" value="查看" class="btn btn-primary"/>
+        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditUserShow"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="编辑" class="btn btn-primary"/>
+        <input type="button" onclick="location.href='{{urlfor "FamilyController.ShowUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="查看" class="btn btn-primary"/>
         {{ if ne .Guid $.main_guid}}
             <input type="button"  data-url="{{urlfor "FamilyController.SetMainUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="设为主家长" class="main_parent btn btn-primary"/>
         {{ end }}
@@ -83,8 +83,8 @@
     </td>
     <td>学生</td>
     <td style="width: 700px">
-        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.Guid}}'" value="编辑" class="btn btn-primary"/>
-        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.Guid}}'" value="查看" class="btn btn-primary"/>
+        <input type="button" onclick="location.href='{{urlfor "FamilyController.EditStuShow"}}?guid={{$value.Guid}}&family_guid={{$.family_guid}}'" value="编辑" class="btn btn-primary"/>
+        <input type="button" onclick="location.href='{{urlfor "FamilyController.ShowStu"}}?guid={{$value.Guid}}&family_guid={{$.family_guid}}'" value="查看" class="btn btn-primary"/>
     </td>
 </tr>
 {{end}}

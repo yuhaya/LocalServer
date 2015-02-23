@@ -17,7 +17,9 @@
     <!-- 可选的Bootstrap主题文件（一般不用引入） -->
     <link rel="stylesheet" href="/static/js/lib/bootstrap-3.3.2/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/lib/common.css"/>
+    {{if eq (isfile "/static/css/" .ControllerName "/" .MethodName ".css") true }}
     <link rel="stylesheet" href="/static/css/{{.ControllerName}}/{{.MethodName}}.css"/>
+    {{ end }}
 </head>
 <body>
 <div id="title_name">
@@ -72,10 +74,17 @@
         // 文件编码
         charset: 'utf-8'
     });
+    {{if eq (isfile "/static/js/" .ControllerName "/" .MethodName ".js") true }}
     seajs.use(['lib/commen', '{module_path}'], function(commen, main) {
         commen.init();
         main.init();
     });
+    {{ else }}
+    seajs.use(['lib/commen'], function(commen) {
+        commen.init();
+    });
+    {{end}}
+
 </script>
 </body>
 </html>

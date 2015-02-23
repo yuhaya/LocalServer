@@ -172,6 +172,7 @@ func (this *FamilyController) AddMember() {
 
 	memeber_type := this.GetString("memeber_type")
 	family_guid := this.GetString("family_guid")
+	guid := this.GetString("Guid")
 
 	urlmsg := make(map[string]string)
 	urlmsg["返回上一页"] = "javascript:history.go(-1)"
@@ -210,43 +211,82 @@ func (this *FamilyController) AddMember() {
 
 	} else {
 
-		urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=user&family_guid=" + family_guid
-		//添加家长
-		user_model := models.Users{}
-
-		if err := this.ParseForm(&user_model); err != nil {
-			//handle error
-
-			this.OutputMsg(err.Error(), urlmsg)
-		} else {
-			user_model.CreateTime = time.Now()
-			user_guid := tool.Uuid()
-			user_model.Guid = user_guid
-			school_model := models.SchoolModel{}
-			user_model.SchoolGuid = school_model.GetSchoolGuid()
-
-			family_member := models.FamilyMember{}
-			family_member.FamilyGuid = family_guid
-			family_member.MemberGuid = user_guid
-			family_member.Type = 1
-
-			family_model := models.FamiliyModel{}
-			flag := family_model.AddUser(&user_model, &family_member)
-
+		if guid != "" {
+			//修改家长
+			user_model := models.Users{}
+			par := make(map[string]interface{})
+			par["phone"] = this.GetString("Phone")
+			par["realname"] = this.GetString("Realname")
+			par["spell"] = this.GetString("Spell")
+			par["password"] = this.GetString("Password")
+			par["gender"], _ = this.GetInt8("Gender")
+			par["id_card"] = this.GetString("IdCard")
+			flag := user_model.UpdateUserByGuid(guid, par)
 			if flag {
-				this.OutputMsg("添加成功", urlmsg)
+				this.OutputMsg("更新成功", urlmsg)
 			} else {
-				this.OutputMsg("添加失败", urlmsg)
+				this.OutputMsg("更新失败", urlmsg)
 			}
+
+		} else {
+
+			fmt.Println("add par===== \n")
+			//添加家长
+			urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=user&family_guid=" + family_guid
+			user_model := models.Users{}
+
+			if err := this.ParseForm(&user_model); err != nil {
+				//handle error
+
+				this.OutputMsg(err.Error(), urlmsg)
+			} else {
+				user_model.CreateTime = time.Now()
+				user_guid := tool.Uuid()
+				user_model.Guid = user_guid
+				school_model := models.SchoolModel{}
+				user_model.SchoolGuid = school_model.GetSchoolGuid()
+
+				family_member := models.FamilyMember{}
+				family_member.FamilyGuid = family_guid
+				family_member.MemberGuid = user_guid
+				family_member.Type = 1
+
+				family_model := models.FamiliyModel{}
+				flag := family_model.AddUser(&user_model, &family_member)
+
+				if flag {
+					this.OutputMsg("添加成功", urlmsg)
+				} else {
+					this.OutputMsg("添加失败", urlmsg)
+				}
+			}
+
 		}
 	}
+}
+
+/**
+ * 编辑用户显示
+ */
+func (this *FamilyController) EditUserShow() {
+	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
+	this.Data["family_guid"] = family_guid
+	this.Data["memeber_type"] = "user"
+	this.Data["guid"] = guid
+	var user models.Users
+	err := user.GetUserByGuid(guid)
+	if err != nil {
+		//日志记录
+	}
+	this.Data["user"] = &user
+	this.TplNames = "family/editusershow.tpl"
 }
 
 /**
  * 编辑家长
  */
 func (this *FamilyController) EditUser() {
-
 }
 
 /**
@@ -254,6 +294,15 @@ func (this *FamilyController) EditUser() {
  */
 func (this *FamilyController) ShowUser() {
 
+	this.TplNames = "family/showuser.tpl"
+}
+
+/**
+ * 编辑学生显示
+ */
+func (this *FamilyController) EditStuShow() {
+
+	this.TplNames = "family/editstushow.tpl"
 }
 
 /**
@@ -268,6 +317,7 @@ func (this *FamilyController) EditStu() {
  */
 func (this *FamilyController) ShowStu() {
 
+	this.TplNames = "family/showstu.tpl"
 }
 
 /**
