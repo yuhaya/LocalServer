@@ -313,6 +313,21 @@ func (this *FamilyController) ShowUser() {
  */
 func (this *FamilyController) EditStuShow() {
 
+	family_guid := this.GetString("family_guid")
+	this.Data["memeber_type"] = "stu"
+	this.Data["family_guid"] = family_guid
+
+	//添加学生
+	grade_class, grade := models.GetAllGradeClass()
+	grade_class_json, err := json.Marshal(grade_class)
+	if err == nil && len(grade_class) != 0 {
+		this.Data["grade_class_json"] = string(grade_class_json)
+	} else {
+		this.Data["grade_class_json"] = "{}"
+	}
+	fmt.Printf("\n%v======%s\n", grade_class, grade_class_json)
+
+	this.Data["grades"] = grade
 	this.TplNames = "family/editstushow.tpl"
 }
 

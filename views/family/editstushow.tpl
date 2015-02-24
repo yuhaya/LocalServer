@@ -1,11 +1,11 @@
 <div class="page-header">
-    <h1>编辑家庭成员 <small>学生</small></h1>
+    <h1>添加家庭成员 <small>学生</small></h1>
 </div>
 
 <div class="row" style="margin-top: 30px">
 <div class="col-md-3"></div>
 <div class="col-md-6">
-    <form action="{{urlfor "FamilyController.AddMember"}}" method="POST" name="form_add_memeber" id="form_add_memeber">
+    <form action="{{urlfor "FamilyController.AddMember"}}" method="POST" name="form_mod_memeber" id="form_mod_memeber">
 
     <input type="hidden" value="{{.family_guid}}" name="family_guid" />
     <input type="hidden" value="{{.memeber_type}}" name="memeber_type" />
@@ -85,6 +85,6 @@
 <script>
 var data = {
     grade_class : '{{.grade_class_json}}',
-    type:"stu"
+    type:"{{.memeber_type}}"
 }
 </script>
