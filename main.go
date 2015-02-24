@@ -27,7 +27,7 @@ func isfile(paths ...string) bool {
 	if err != nil && os.IsNotExist(err) {
 		return false
 	}
-	return false
+	return true
 }
 
 func main() {
