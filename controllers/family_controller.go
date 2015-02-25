@@ -179,33 +179,56 @@ func (this *FamilyController) AddMember() {
 
 	if memeber_type == "stu" {
 
-		urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=stu&family_guid=" + family_guid
-		//添加学生
+		if guid != "" {
 
-		stu_model := models.Students{}
-		if err := this.ParseForm(&stu_model); err != nil {
-			//handle error
-
-			this.OutputMsg(err.Error(), urlmsg)
-		} else {
-			stu_model.Create_time = time.Now()
-			stu_guid := tool.Uuid()
-			stu_model.Guid = stu_guid
-			school_model := models.SchoolModel{}
-			stu_model.School_guid = school_model.GetSchoolGuid()
-
-			family_member := models.FamilyMember{}
-			family_member.FamilyGuid = family_guid
-			family_member.MemberGuid = stu_guid
-			family_member.Type = 0
-
-			family_model := models.FamiliyModel{}
-			flag := family_model.AddStu(&stu_model, &family_member)
-
+			//修改学生
+			stu_model := models.Students{}
+			par := make(map[string]interface{})
+			par["realname"] = this.GetString("Realname")
+			par["sid"] = this.GetString("Sid")
+			par["spell"] = this.GetString("Spell")
+			par["grade_guid"] = this.GetString("Grade_guid")
+			par["class_guid"] = this.GetString("Class_guid")
+			par["gender"], _ = this.GetInt8("Gender")
+			par["birthday"] = this.GetString("Birthday")
+			par["enrol_time"] = this.GetString("Enrol_time")
+			flag := stu_model.UpdateStuByGuid(guid, par)
 			if flag {
-				this.OutputMsg("添加成功", urlmsg)
+				this.OutputMsg("更新成功", urlmsg)
 			} else {
-				this.OutputMsg("添加失败", urlmsg)
+				this.OutputMsg("更新失败", urlmsg)
+			}
+
+		} else {
+
+			urlmsg["再添加一个"] = "/family/members/user/add?memeber_type=stu&family_guid=" + family_guid
+			//添加学生
+
+			stu_model := models.Students{}
+			if err := this.ParseForm(&stu_model); err != nil {
+				//handle error
+
+				this.OutputMsg(err.Error(), urlmsg)
+			} else {
+				stu_model.Create_time = time.Now()
+				stu_guid := tool.Uuid()
+				stu_model.Guid = stu_guid
+				school_model := models.SchoolModel{}
+				stu_model.School_guid = school_model.GetSchoolGuid()
+
+				family_member := models.FamilyMember{}
+				family_member.FamilyGuid = family_guid
+				family_member.MemberGuid = stu_guid
+				family_member.Type = 0
+
+				family_model := models.FamiliyModel{}
+				flag := family_model.AddStu(&stu_model, &family_member)
+
+				if flag {
+					this.OutputMsg("添加成功", urlmsg)
+				} else {
+					this.OutputMsg("添加失败", urlmsg)
+				}
 			}
 		}
 
@@ -275,6 +298,7 @@ func (this *FamilyController) EditUserShow() {
 	this.Data["memeber_type"] = "user"
 	this.Data["guid"] = guid
 	var user models.Users
+
 	err := user.GetUserByGuid(guid)
 	if err != nil {
 		//日志记录
@@ -314,10 +338,18 @@ func (this *FamilyController) ShowUser() {
 func (this *FamilyController) EditStuShow() {
 
 	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
 	this.Data["memeber_type"] = "stu"
 	this.Data["family_guid"] = family_guid
+	this.Data["guid"] = guid
+	var stu models.Students
+	err := stu.GetStudentByGuid(guid)
+	if err != nil {
+		//记录日志
+	}
+	fmt.Printf("\n===%#v===++++++++++++++++++++++++++++++++++=\n", stu)
+	this.Data["stu"] = &stu
 
-	//添加学生
 	grade_class, grade := models.GetAllGradeClass()
 	grade_class_json, err := json.Marshal(grade_class)
 	if err == nil && len(grade_class) != 0 {
@@ -325,8 +357,6 @@ func (this *FamilyController) EditStuShow() {
 	} else {
 		this.Data["grade_class_json"] = "{}"
 	}
-	fmt.Printf("\n%v======%s\n", grade_class, grade_class_json)
-
 	this.Data["grades"] = grade
 	this.TplNames = "family/editstushow.tpl"
 }
@@ -342,7 +372,27 @@ func (this *FamilyController) EditStu() {
  * 查看学生详情
  */
 func (this *FamilyController) ShowStu() {
+	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
+	this.Data["memeber_type"] = "stu"
+	this.Data["family_guid"] = family_guid
+	this.Data["guid"] = guid
+	var stu models.Students
+	err := stu.GetStudentByGuid(guid)
+	if err != nil {
+		//记录日志
+	}
+	fmt.Printf("\n===%#v===++++++++++++++++++++++++++++++++++=\n", stu)
+	this.Data["stu"] = &stu
 
+	grade_class, grade := models.GetAllGradeClass()
+	grade_class_json, err := json.Marshal(grade_class)
+	if err == nil && len(grade_class) != 0 {
+		this.Data["grade_class_json"] = string(grade_class_json)
+	} else {
+		this.Data["grade_class_json"] = "{}"
+	}
+	this.Data["grades"] = grade
 	this.TplNames = "family/showstu.tpl"
 }
 

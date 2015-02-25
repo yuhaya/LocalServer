@@ -35,7 +35,7 @@
     <th>
         成员身份
     </th>
-    <th style="width: 200px">
+    <th style="width:35%">
         操作
     </th>
 </tr>
@@ -64,6 +64,7 @@
         <input type="button" onclick="location.href='{{urlfor "FamilyController.ShowUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="查看" class="btn btn-primary"/>
         {{ if ne .Guid $.main_guid}}
             <input type="button"  data-url="{{urlfor "FamilyController.SetMainUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="设为主家长" class="main_parent btn btn-primary"/>
+            <input type="button"  data-url="{{urlfor "FamilyController.UDelete"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="删除" class="main_parent btn btn-danger"/>
         {{ end }}
     </td>
 </tr>
@@ -85,6 +86,7 @@
     <td style="width: 700px">
         <input type="button" onclick="location.href='{{urlfor "FamilyController.EditStuShow"}}?guid={{$value.Guid}}&family_guid={{$.family_guid}}'" value="编辑" class="btn btn-primary"/>
         <input type="button" onclick="location.href='{{urlfor "FamilyController.ShowStu"}}?guid={{$value.Guid}}&family_guid={{$.family_guid}}'" value="查看" class="btn btn-primary"/>
+        <input type="button"  data-url="{{urlfor "FamilyController.SDelete"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="删除" class="main_parent btn btn-danger"/>
     </td>
 </tr>
 {{end}}

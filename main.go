@@ -8,6 +8,7 @@ import (
 	"github.com/beego/i18n"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 /**
@@ -31,8 +32,17 @@ func isfile(paths ...string) bool {
 	return true
 }
 
+/**
+ * 格式化时间
+ */
+func date_format(date time.Time) string {
+	str := date.Format("2006-01-02")
+	return str
+}
+
 func main() {
 	beego.AddFuncMap("isfile", isfile)
+	beego.AddFuncMap("date_format", date_format)
 	beego.AddFuncMap("i18n", i18n.Tr)
 	orm.Debug = true
 	beego.Run()
