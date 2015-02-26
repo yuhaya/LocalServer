@@ -308,9 +308,23 @@ func (this *FamilyController) EditUserShow() {
 }
 
 /**
- * 编辑家长
+ * 删除家长
  */
-func (this *FamilyController) EditUser() {
+func (this *FamilyController) UDelete() {
+
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+
+	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
+	var user models.Users
+	flag := user.DeleteUser(guid, family_guid)
+
+	if flag {
+		this.OutputMsg("删除成功", urlmsg)
+	} else {
+		this.OutputMsg("删除失败", urlmsg)
+	}
 }
 
 /**
@@ -347,7 +361,6 @@ func (this *FamilyController) EditStuShow() {
 	if err != nil {
 		//记录日志
 	}
-	fmt.Printf("\n===%#v===++++++++++++++++++++++++++++++++++=\n", stu)
 	this.Data["stu"] = &stu
 
 	grade_class, grade := models.GetAllGradeClass()
@@ -362,10 +375,22 @@ func (this *FamilyController) EditStuShow() {
 }
 
 /**
- * 编辑学生
+ * 删除学生
  */
-func (this *FamilyController) EditStu() {
+func (this *FamilyController) SDelete() {
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "javascript:history.go(-1)"
 
+	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
+	var stu models.Students
+	flag := stu.DeleteStu(guid, family_guid)
+
+	if flag {
+		this.OutputMsg("删除成功", urlmsg)
+	} else {
+		this.OutputMsg("删除失败", urlmsg)
+	}
 }
 
 /**
@@ -382,7 +407,6 @@ func (this *FamilyController) ShowStu() {
 	if err != nil {
 		//记录日志
 	}
-	fmt.Printf("\n===%#v===++++++++++++++++++++++++++++++++++=\n", stu)
 	this.Data["stu"] = &stu
 
 	grade_class, grade := models.GetAllGradeClass()
@@ -401,4 +425,17 @@ func (this *FamilyController) ShowStu() {
  */
 func (this *FamilyController) SetMainUser() {
 
+	family_guid := this.GetString("family_guid")
+	guid := this.GetString("guid")
+
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+
+	var fm models.Families
+	flag := fm.UpdateMain(family_guid, guid)
+	if flag {
+		this.OutputMsg("修改成功", urlmsg)
+	} else {
+		this.OutputMsg("修改失败", urlmsg)
+	}
 }

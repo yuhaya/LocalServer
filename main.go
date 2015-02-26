@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "LocalServer/routers"
-	"fmt"
+	//	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/beego/i18n"
@@ -22,13 +22,13 @@ func isfile(paths ...string) bool {
 		x += n
 	}
 	path_total := dir + x
-	fmt.Println(path_total)
+	//	fmt.Println(path_total)
 	_, err := os.Stat(path_total)
 	if err != nil && os.IsNotExist(err) {
-		fmt.Printf("\n=====%s====not found\n", path_total)
+		//		fmt.Printf("\n=====%s====not found\n", path_total)
 		return false
 	}
-	fmt.Printf("\n=====%s====found\n", path_total)
+	//	fmt.Printf("\n=====%s====found\n", path_total)
 	return true
 }
 

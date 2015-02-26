@@ -44,3 +44,32 @@ func (this *Users) UpdateUserByGuid(guid string, par map[string]interface{}) boo
 		return false
 	}
 }
+
+/**
+ * 删除用户
+ */
+func (this *Users) DeleteUser(guid string, fm string) bool {
+	o := orm.NewOrm()
+	err := o.Begin()
+
+	_, err1 := o.QueryTable(this).Filter("guid", guid).Delete()
+	_, err2 := o.QueryTable(new(FamilyMember)).Filter("member_guid", guid).Filter("family_guid", fm).Delete()
+	_, err3 := o.QueryTable(new(FamilyRelation)).Filter("user_guid", guid).Delete()
+	_, err4 := o.QueryTable(new(CardReceiver)).Filter("guid", guid).Delete()
+	_, err5 := o.QueryTable(new(MemberCard)).Filter("guid", guid).Delete()
+
+	var err6 error
+	var flag bool
+	if err == nil && err1 == nil && err2 == nil && err3 == nil && err4 == nil && err5 == nil {
+		flag = true
+		err6 = o.Commit()
+	} else {
+		flag = false
+		err6 = o.Rollback()
+	}
+	if err == nil && err6 == nil && flag {
+		return true
+	} else {
+		return false
+	}
+}

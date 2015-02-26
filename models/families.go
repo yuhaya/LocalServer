@@ -16,6 +16,23 @@ type Families struct {
 	SchoolGuid string `orm:"size(50)"`
 }
 
+/**
+ * 更新主家长
+ */
+func (this *Families) UpdateMain(guid string, first_guid string) bool {
+	o := orm.NewOrm()
+	_, err := o.QueryTable(this).Filter("guid", guid).Update(orm.Params{
+		"first_guid": first_guid,
+	})
+
+	if err == nil {
+		return true
+	} else {
+		return false
+	}
+
+}
+
 type FamiliyModel struct {
 	Base
 }
@@ -23,11 +40,11 @@ type FamiliyModel struct {
 /**
  * 根据家庭名称以检索家庭以及主家长信息
  */
-func (this *FamiliyModel) GetListByFamlilyName(name string) []orm.Params {
+func (this *FamiliyModel) GetListByFamlilyName(name string) ([]orm.Params, int64) {
 	o := orm.NewOrm()
 	var maps []orm.Params
 	name_str := "%" + name + "%"
-	sql := `SELECT f.*,u.guid as user_guid,u.phone as user_guid,u.realname as user_realname
+	sql := `SELECT f.*,u.guid as user_guid,u.phone as user_phone,u.realname as user_realname
 	FROM ittr_families AS f LEFT JOIN ittr_users as u ON f.first_guid = u.guid WHERE f.name LIKE ?`
 	r := o.Raw(sql, name_str)
 	num, err := r.Values(&maps)
@@ -35,20 +52,20 @@ func (this *FamiliyModel) GetListByFamlilyName(name string) []orm.Params {
 	if err == nil && num > 0 {
 		fmt.Printf("%v===\n", maps)
 	}
-	return maps
+	return maps, num
 }
 
 /**
  *根据用户名检索家庭信息
  */
-func (this *FamiliyModel) GetListByUserName(name string) []orm.Params {
+func (this *FamiliyModel) GetListByUserName(name string) ([]orm.Params, int64) {
 	o := orm.NewOrm()
 	var maps []orm.Params
 	name_str := "%" + name + "%"
 	//家长表信息检索
 	sql := `SELECT f.*,u.guid as user_guid,u.phone as user_phone,u.realname as user_realname
 			FROM ittr_users AS u INNER JOIN ittr_family_member AS fm ON u.guid = fm.member_guid
-			INNER JOIN ittr_families as f on fm.family_guid = f.guid where f.name LIKE ?`
+			INNER JOIN ittr_families as f on fm.family_guid = f.guid where u.realname LIKE ?`
 	r := o.Raw(sql, name_str)
 	num, err := r.Values(&maps)
 	if err == nil && num > 0 {
@@ -57,9 +74,9 @@ func (this *FamiliyModel) GetListByUserName(name string) []orm.Params {
 
 	//学生信息检索
 	var maps_stu []orm.Params
-	sql_stu := `SELECT f.*,u.guid as user_guid,u.phone as user_phone,u.realname as user_realname
+	sql_stu := `SELECT f.*,u.guid as user_guid,u.realname as user_realname
 			FROM ittr_students AS u INNER JOIN ittr_family_member AS fm ON u.guid = fm.member_guid
-			INNER JOIN ittr_families as f on fm.family_guid = f.guid where f.name LIKE ?`
+			INNER JOIN ittr_families as f on fm.family_guid = f.guid where u.realname LIKE ?`
 	r_stu := o.Raw(sql_stu, name_str)
 	num_stu, err_stu := r_stu.Values(&maps_stu)
 	if err_stu == nil && num_stu > 0 {
@@ -67,31 +84,33 @@ func (this *FamiliyModel) GetListByUserName(name string) []orm.Params {
 	}
 
 	res := append(maps, maps_stu...)
-	return res
+	return res, num_stu + num
 }
 
 /*
  * 根据用户的手机号进行检索
  */
-func (this *FamiliyModel) GetListByUserPhone(phone string) []orm.Params {
+func (this *FamiliyModel) GetListByUserPhone(phone string) ([]orm.Params, int64) {
 	o := orm.NewOrm()
 	var maps []orm.Params
 	is_phone := tool.IsPhone(phone)
 	if !is_phone {
-		return maps
+		return maps, 0
 	}
 
 	//家长表信息检索
 	sql := `SELECT f.*,u.guid as user_guid,u.phone as user_phone,u.realname as user_realname
 			FROM ittr_users AS u INNER JOIN ittr_family_member AS fm ON u.guid = fm.member_guid
-			INNER JOIN ittr_families as f on fm.family_guid = f.guid where f.phone = ?`
+			INNER JOIN ittr_families as f on fm.family_guid = f.guid where u.phone = ?`
 	r := o.Raw(sql, phone)
 	num, err := r.Values(&maps)
 	if err == nil && num > 0 {
-		fmt.Printf("%v===\n", maps)
+		fmt.Printf("%v==xxxxxxxxxxxxxxxxx=\n", maps)
+	} else {
+		fmt.Printf("%v====error===\n", err.Error())
 	}
 
-	return maps
+	return maps, num
 }
 
 /**

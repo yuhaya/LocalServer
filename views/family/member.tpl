@@ -9,8 +9,9 @@
 <div class="col-md-1">
 </div>
 <div class="col-md-10">
-    <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{{urlfor "FamilyController.AddMemberShow"}}?memeber_type=user&family_guid={{.family_guid}}'" >添加家长</button>
-    <button type="button" class="btn btn-default btn-lg" onclick="location.href='{{urlfor "FamilyController.AddMemberShow"}}?memeber_type=stu&family_guid={{.family_guid}}'" >添加学生</button>
+    <button type="button" class="col-sm-5 btn btn-primary btn-lg" onclick="location.href='{{urlfor "FamilyController.AddMemberShow"}}?memeber_type=user&family_guid={{.family_guid}}'" >添加家长</button>
+    <div class="col-sm-2"></div>
+    <button type="button" class="col-sm-5 btn btn-default btn-lg" onclick="location.href='{{urlfor "FamilyController.AddMemberShow"}}?memeber_type=stu&family_guid={{.family_guid}}'" >添加学生</button>
 </div>
 <div class="col-md-1">
 </div>
@@ -63,8 +64,8 @@
         <input type="button" onclick="location.href='{{urlfor "FamilyController.EditUserShow"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="编辑" class="btn btn-primary"/>
         <input type="button" onclick="location.href='{{urlfor "FamilyController.ShowUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="查看" class="btn btn-primary"/>
         {{ if ne .Guid $.main_guid}}
-            <input type="button"  data-url="{{urlfor "FamilyController.SetMainUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="设为主家长" class="main_parent btn btn-primary"/>
-            <input type="button"  data-url="{{urlfor "FamilyController.UDelete"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="删除" class="main_parent btn btn-danger"/>
+            <input type="button"  onclick="location.href='{{urlfor "FamilyController.SetMainUser"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="设为主家长" class="main_parent btn btn-primary"/>
+            <input type="button"  onclick="location.href='{{urlfor "FamilyController.UDelete"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="删除" class="main_parent btn btn-danger"/>
         {{ end }}
     </td>
 </tr>
@@ -86,7 +87,7 @@
     <td style="width: 700px">
         <input type="button" onclick="location.href='{{urlfor "FamilyController.EditStuShow"}}?guid={{$value.Guid}}&family_guid={{$.family_guid}}'" value="编辑" class="btn btn-primary"/>
         <input type="button" onclick="location.href='{{urlfor "FamilyController.ShowStu"}}?guid={{$value.Guid}}&family_guid={{$.family_guid}}'" value="查看" class="btn btn-primary"/>
-        <input type="button"  data-url="{{urlfor "FamilyController.SDelete"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="删除" class="main_parent btn btn-danger"/>
+        <input type="button"  onclick="location.href='{{urlfor "FamilyController.SDelete"}}?guid={{.Guid}}&family_guid={{$.family_guid}}'" value="删除" class="main_parent btn btn-danger"/>
     </td>
 </tr>
 {{end}}
