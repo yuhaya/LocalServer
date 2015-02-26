@@ -27,7 +27,6 @@ func (this *ClassController) Index() {
 		AssistantGuid string
 	}
 	var datas []data
-	fmt.Println(cls)
 	if cls != nil {
 		for i := 0; i < len(cls); i++ {
 			var exist bool = false
@@ -60,7 +59,6 @@ func (this *ClassController) Index() {
 			}
 		}
 	}
-	fmt.Println(datas)
 	this.AjaxReturnFun("0", "获取信息成功", datas)
 }
 

@@ -29,6 +29,8 @@ func init() {
 	beego.Router("/family/members/main", &controllers.FamilyController{}, "*:SetMainUser")
 	grade()
 	class()
+    school()
+    user()
 }
 
 func grade() {
@@ -43,4 +45,13 @@ func class() {
 	beego.Router("/class/list", &controllers.ClassController{}, "post:Index")
 	beego.Router("/class/create", &controllers.ClassController{}, "post:Create")
 	beego.Router("/class/delete", &controllers.ClassController{}, "post:Delete")
+}
+
+func school(){
+    beego.Router("/school",&controllers.SchoolController{},"get:Index")
+    beego.Router("/school/create",&controllers.SchoolController{},"post:Create")
+}
+
+func user(){
+    beego.Router("/user/index",&controllers.UserController{},"get:Index")
 }

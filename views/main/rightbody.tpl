@@ -1,3 +1,3 @@
-<div id="bg">
+<div id="bg" class="container">
 
 </div>
