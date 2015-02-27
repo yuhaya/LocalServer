@@ -74,3 +74,21 @@ func (this *CardController) Search() {
 //	device := models.DevicesModel{}
 //	device.DemoData()
 //}
+/**
+ * 显示家庭成员
+ */
+func (this *CardController) MemeberList() {
+	family_guid := this.GetString("family_guid")
+	fm := models.FamiliyModel{}
+	members, main_guid := fm.GetMembersByGuid(family_guid)
+
+	guid_slice := make([]string, len(members["users"])+len(members["stus"]))
+	for _, val := range members["users"] {
+		guid_slice = append(guid_slice, val.Guid)
+	}
+	this.Data["members"] = members
+	this.Data["users"] = members["users"]
+	this.Data["main_guid"] = main_guid
+	this.Data["family_guid"] = family_guid
+	this.TplNames = "card/member.tpl"
+}

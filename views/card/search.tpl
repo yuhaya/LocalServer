@@ -1,7 +1,5 @@
 <ul class="nav nav-tabs">
   <li role="presentation" class="active"><a href="#">分配叮当卡</a></li>
-  <li role="presentation"><a href="#">管理叮当卡</a></li>
-  <li role="presentation"><a href="#">创建家庭</a></li>
 </ul>
 
 <div class="container" id="search_box">
@@ -41,7 +39,7 @@
     </td>
     <td>
 
-        <input type="button" class="btn btn-default" value="分配卡">
+        <input type="button" class="btn btn-default" value="分配卡" onclick="location.href='{{urlfor "CardController.MemeberList"}}?family_guid={{.guid}}'">
     </td>
 </tr>
 {{end}}
@@ -67,7 +65,7 @@
         {{.user_realname}}
     </td>
     <td>
-        <input type="button" class="btn btn-default" value="分配卡">
+        <input type="button" class="btn btn-default" onclick="location.href='{{urlfor "CardController.MemeberList"}}?family_guid={{.guid}}'" value="分配卡">
     </td>
 </tr>
 {{end}}
@@ -98,7 +96,7 @@
         {{.user_phone}}
     </td>
     <td>
-        <input type="button" class="btn btn-default" value="分配卡">
+        <input type="button" class="btn btn-default" onclick="location.href='{{urlfor "CardController.MemeberList"}}?family_guid={{.guid}}'" value="分配卡">
 
     </td>
 </tr>

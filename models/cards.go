@@ -24,3 +24,10 @@ func (this *CardsModel) List() ([]*Cards, int64, error) {
 	num, err := qs.Filter("Enabled", 1).All(&cards_list)
 	return cards_list, num, err
 }
+
+/**
+ * 更具guid获取所有的卡号
+ */
+func (this *Cards) GetAllCardsByGuids(guids []string) map[string][]string {
+
+}
