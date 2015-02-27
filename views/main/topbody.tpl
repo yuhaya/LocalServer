@@ -15,7 +15,8 @@
             color: #333;
         }
         #main{
-            width: 100%;
+            width: 50%;
+            float: left;
         }
         #login_out{
             width: 80px;
@@ -24,6 +25,17 @@
             border: 0px;
             color: #333;
             background-color: #000000;
+            cursor: pointer;
+        }
+        #login{
+            float: right;
+            height: 40px;
+            width: 40px;
+            background-color: #2892BC;
+            color:#f5f5f5;
+            text-align: center;
+            vertical-align: middle;
+            padding: 30px 20px 10px 20px;
             cursor: pointer;
         }
     </style>
@@ -42,5 +54,15 @@
         </td>
     </tr>
 </table>
+<div id="login">
+    登陆
+</div>
+<script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
+<script>
+    $("#login").click(function () {
+        var url = $(this).attr("data-url");
+        window.top.frames["right"].location.href = "/user/index";
+    })
+</script>
 </body>
 </html>
