@@ -86,9 +86,43 @@ func (this *CardController) MemeberList() {
 	for _, val := range members["users"] {
 		guid_slice = append(guid_slice, val.Guid)
 	}
+	var mc models.MemberCard
+	this.Data["cards"] = mc.GetAllCardsByGuids(guid_slice)
 	this.Data["members"] = members
-	this.Data["users"] = members["users"]
 	this.Data["main_guid"] = main_guid
 	this.Data["family_guid"] = family_guid
+
 	this.TplNames = "card/member.tpl"
+
+}
+
+/**
+ * 添加卡号
+ */
+func (this *CardController) Add() {
+	guid := this.GetString("guid")
+	card := this.GetString("card")
+	family_guid := this.GetString("family_guid")
+	type_num, _ := this.GetInt8("type")
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "/card/members?family_guid=" + family_guid
+
+	if guid != "" && card != "" {
+		var mem_card models.MemberCard
+		mem_card.Guid = guid
+		mem_card.Card = card
+		mem_card.Type = type_num
+		school_model := models.SchoolModel{}
+		mem_card.SchoolGuid = school_model.GetSchoolGuid()
+
+		flag, _, _ := mem_card.InsertOne()
+
+		if flag {
+			this.OutputMsg("添加成功! ", urlmsg)
+		} else {
+			this.OutputMsg("添加失败,联系管理员! ", urlmsg)
+		}
+	} else {
+		this.OutputMsg("数据提交有误! ", urlmsg)
+	}
 }

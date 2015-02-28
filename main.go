@@ -40,9 +40,19 @@ func date_format(date time.Time) string {
 	return str
 }
 
+/**
+ * 判断map中得key是否存在
+ */
+func map_exist(map_val map[string][]string, key string) bool {
+	_, ok := map_val[key]
+	return ok
+}
+
 func main() {
 	beego.AddFuncMap("isfile", isfile)
 	beego.AddFuncMap("date_format", date_format)
+	beego.AddFuncMap("map_exist", map_exist)
+
 	beego.AddFuncMap("i18n", i18n.Tr)
 	orm.Debug = true
 	beego.Run()
