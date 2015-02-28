@@ -9,22 +9,22 @@
 
         {{ if eq .num 0 }}
             <div class="col-md-12">系统还未添加刷卡机设备</div>
-        {{ else }}
+            {{ else }}
+        <div class="list-group">
                 {{range .device_list}}
-                    <div class="row devices" data-id="{{ .Guid }}" data-href="{{ urlfor "CardController.Show" }}">
-                        <div class="col-md-7">
-                                <span>序列号/IP:</span><span>{{ .Device }}</span>
-                        </div>
-                        <div class="col-md-3">{{ .Description }}</div>
-                        <div class="col-md-2">
+            <a href="#" class="list-group-item devices" data-id="{{ .Guid }}" data-href="{{ urlfor "CardController.Show" }}">
+                        <h4 class="list-group-item-heading"><span>序列号/IP:</span>{{ .Device }}</h4>
+                        <p>{{ .Description }}</p>
+                        <p>
                             {{ if eq .Status 1 }}
                                 连接正常
                             {{ else }}
                                 连接异常
                             {{ end }}
-                        </div>
-                    </div>
+                        </p>
+            </a>
                 {{end}}
+        </div>
         {{ end }}
     </div>
     {{ end }}

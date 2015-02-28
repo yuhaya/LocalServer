@@ -126,3 +126,27 @@ func (this *CardController) Add() {
 		this.OutputMsg("数据提交有误! ", urlmsg)
 	}
 }
+
+/**
+ * 删除卡号
+ */
+func (this *CardController) Del() {
+
+	guid := this.GetString("guid")
+	card := this.GetString("card")
+	fm := this.GetString("family_guid")
+	var mem_card models.MemberCard
+	mem_card.Card = card
+	mem_card.Guid = guid
+	flag := mem_card.Delete()
+
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "/card/members?family_guid=" + fm
+
+	if flag {
+		this.OutputMsg("删除成功! ", urlmsg)
+	} else {
+		this.OutputMsg("删除失败! ", urlmsg)
+	}
+
+}

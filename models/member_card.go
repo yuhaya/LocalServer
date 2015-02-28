@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -12,9 +13,31 @@ type MemberCard struct {
 	SchoolGuid string `orm:"size(50)"`
 }
 
+/**
+ * 添加一张卡号
+ */
 func (this *MemberCard) InsertOne() (bool, int64, string) {
 	o := orm.NewOrm()
+
+	var card Cards
+	cnt, _ := o.QueryTable(&card).Filter("guid", this.Card).Count()
+	if cnt == 0 {
+		card.SchoolGuid = this.SchoolGuid
+		card.Guid = this.Card
+		card.Enabled = 1
+		card.Kind = 0
+		_, err2 := o.Insert(&card)
+		if err2 != nil {
+			return false, 0, err2.Error()
+		}
+	}
+	cnt2, _ := o.QueryTable(this).Filter("guid", this.Guid).Filter("card", this.Card).Count()
+	if cnt2 > 0 {
+		return false, 0, "该卡已经有人使用!"
+	}
+
 	id, err := o.Insert(this)
+
 	if err == nil {
 		return true, id, ""
 	} else {
@@ -47,4 +70,26 @@ func (this *MemberCard) GetAllCardsByGuids(guids []string) map[string][]string {
 	} else {
 		return res
 	}
+}
+
+/**
+ * 删除成员与卡的绑定关系
+ */
+func (this *MemberCard) Delete() bool {
+	o := orm.NewOrm()
+	fmt.Println(this)
+	err := o.Begin()
+
+	_, err3 := o.QueryTable(this).Filter("guid", this.Guid).Filter("card", this.Card).Delete()
+	card := Cards{}
+	_, err4 := o.QueryTable(&card).Filter("guid", this.Card).Delete()
+
+	if err == nil && err3 == nil && err4 == nil {
+		o.Commit()
+		return true
+	} else {
+		o.Rollback()
+		return false
+	}
+
 }

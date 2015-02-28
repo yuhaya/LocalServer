@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs">
-  <li role="presentation" class="active"><a href="#">分配叮当卡</a></li>
+  <li role="presentation" class="active"><a href="{{ urlfor "CardController.Show" }}">分配叮当卡</a></li>
 </ul>
 
 <div class="container" id="search_box">

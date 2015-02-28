@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs">
-<li role="presentation" ><a href="javascript:history.go(-1)">分配叮当卡</a></li>
+<li role="presentation" ><a href="{{ urlfor "CardController.Show" }}">分配叮当卡</a></li>
     <li role="presentation" class="active"><a href="#">家庭成员绑定卡号</a></li>
 </ul>
 
@@ -54,9 +54,17 @@
         {{ if (map_exist $.cards $value.Guid) }}
             {{ range $k,$v := $.cards }}
                     {{ if eq $k $value.Guid}}
-                        {{range $card := $v}}
-                            {{$card}}<br/>
-                        {{end}}
+
+        <ul class="list-group">
+            {{range $card := $v}}
+            <li class="list-group-item">
+                <span class="badge delcard" style="cursor: pointer" onclick="location.href='{{ urlfor "CardController.Del" }}?card={{$card}}&guid={{$value.Guid}}&family_guid={{$.family_guid}}'" >删除</span>
+                {{$card}}
+            </li>
+            {{end}}
+        </ul>
+
+
                     {{ end }}
             {{ end }}
         {{ else }}
@@ -64,7 +72,7 @@
         {{ end }}
     </td>
     <td>
-        <button type="button" data-val="{{$value.Guid}}" data-toggle="modal" data-type="1"  data-target=".input_card"  class="btn btn-primary bcard">绑定卡号</button>
+        <button type="button"  data-val="{{$value.Guid}}" data-toggle="modal" data-type="1"  data-target=".input_card"  class="btn btn-primary bcard">绑定卡号</button>
     </td>
 </tr>
 {{end}}
@@ -86,9 +94,14 @@
         {{ if (map_exist $.cards $value.Guid) }}
         {{ range $k,$v := $.cards }}
         {{ if eq $k $value.Guid}}
-        {{range $card := $v}}
-        {{$card}}<br/>
-        {{end}}
+        <ul class="list-group">
+            {{range $card := $v}}
+            <li class="list-group-item">
+                <span class="badge delcard" style="cursor: pointer" onclick="location.href='{{ urlfor "CardController.Del" }}?card={{$card}}&guid={{$value.Guid}}&family_guid={{$.family_guid}}'">删除</span>
+                {{$card}}
+            </li>
+            {{end}}
+        </ul>
         {{ end }}
         {{ end }}
         {{ else }}
