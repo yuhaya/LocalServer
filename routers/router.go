@@ -36,6 +36,8 @@ func init() {
 
 	beego.Router("/point/create", &controllers.PointController{}, "post:Create")
 	beego.Router("/point", &controllers.PointController{}, "*:CreateShow")
+
+	beego.Router("/device/get", &controllers.DeviceController{}, "*:Dmess")
 	grade()
 	class()
 	school()
