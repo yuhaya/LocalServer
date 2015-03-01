@@ -1,9 +1,9 @@
 package models
 
 import (
+	"LocalServer/tool"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"LocalServer/tool"
 )
 
 type Devices struct {
@@ -17,6 +17,21 @@ type Devices struct {
 	Description string `orm:"size(255)"`
 	Status      int8   `orm:"default(1)"`
 	Enabled     int8   `orm:"default(1)"`
+}
+
+func (this *Devices) UpdateVmp(vmp string) (bool, string) {
+	o := orm.NewOrm()
+	err := o.Read(this)
+	if err == nil {
+		this.Vmp = vmp
+		if _, err := o.Update(this); err == nil {
+			return true, ""
+		} else {
+			return false, "更新失败"
+		}
+	} else {
+		return false, "未找到相关记录"
+	}
 }
 
 type DevicesModel struct {
@@ -54,7 +69,7 @@ func (this *DevicesModel) DemoData() {
 	device_model.Description = "出校门"
 	device_model.Status = 1
 	device_model.Enabled = 1
-	fmt.Printf("%v\n",device_model)
-	id, _ :=o.Insert(device_model)
-	fmt.Printf("%v\n",id)
+	fmt.Printf("%v\n", device_model)
+	id, _ := o.Insert(device_model)
+	fmt.Printf("%v\n", id)
 }

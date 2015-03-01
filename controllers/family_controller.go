@@ -439,3 +439,48 @@ func (this *FamilyController) SetMainUser() {
 		this.OutputMsg("修改失败", urlmsg)
 	}
 }
+
+/**
+ * 删除卡号
+ */
+func (this *FamilyController) Del() {
+
+	guid := this.GetString("guid")
+	card := this.GetString("card")
+	fm := this.GetString("family_guid")
+	var mem_card models.MemberCard
+	mem_card.Card = card
+	mem_card.Guid = guid
+	flag := mem_card.Delete()
+
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = "/family/members?family_guid=" + fm
+
+	if flag {
+		this.OutputMsg("删除成功! ", urlmsg)
+	} else {
+		this.OutputMsg("删除失败! ", urlmsg)
+	}
+
+}
+
+/**
+ * 显示家庭成员
+ */
+func (this *FamilyController) MemeberList() {
+	family_guid := this.GetString("family_guid")
+	fm := models.FamiliyModel{}
+	members, main_guid := fm.GetMembersByGuid(family_guid)
+
+	guid_slice := make([]string, len(members["users"])+len(members["stus"]))
+	for _, val := range members["users"] {
+		guid_slice = append(guid_slice, val.Guid)
+	}
+	var mc models.MemberCard
+	this.Data["cards"] = mc.GetAllCardsByGuids(guid_slice)
+	this.Data["members"] = members
+	this.Data["main_guid"] = main_guid
+	this.Data["family_guid"] = family_guid
+	this.TplNames = "family/memberlist.tpl"
+
+}

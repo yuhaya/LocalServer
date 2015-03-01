@@ -58,6 +58,11 @@
             卡片管理
         </td>
     </tr>
+    <tr>
+        <td data-url='{{urlfor "PointController.CreateShow"}}'>
+            录入到校信息
+        </td>
+    </tr>
 </table>
 <script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
 <script>

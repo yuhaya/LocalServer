@@ -16,10 +16,15 @@
     <link rel="stylesheet" href="/static/js/lib/bootstrap-3.3.2/css/bootstrap.min.css">
     <!-- 可选的Bootstrap主题文件（一般不用引入） -->
     <link rel="stylesheet" href="/static/js/lib/bootstrap-3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static/js/lib/jquery-ui-1.11.3/jquery-ui.min.css">
+    <link rel="stylesheet" href="/static/js/lib/jquery-ui-1.11.3/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/static/js/lib/jquery-ui-1.11.3/jquery-ui.theme.min.css">
     <link rel="stylesheet" href="/static/css/lib/common.css"/>
     {{if eq (isfile "/static/css/" .ControllerName "/" .MethodName ".css") true }}
     <link rel="stylesheet" href="/static/css/{{.ControllerName}}/{{.MethodName}}.css"/>
     {{ end }}
+    <script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
+    <script type="application/javascript" src="/static/js/lib/jquery-ui-1.11.3/jquery-ui.min.js"></script>
 </head>
 <body>
 <div id="title_name">
@@ -29,7 +34,6 @@
 </div>
 <div id="content">{{.LayoutContent}}</div>
 
-<script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="/static/js/lib/bootstrap-3.3.2/js/bootstrap.min.js"></script>
 <script type="application/javascript" src="/static/js/lib/sea.js"></script>
@@ -40,7 +44,9 @@
         alias: {
             'es5-safe': '/static/js/lib/es5-safe',
             'validate': '/static/js/lib/validate',
-            'validate_helper':'/static/js/lib/validate_helper'
+            'validate_helper':'/static/js/lib/validate_helper',
+            'timepicker_addon':'/static/js/lib/jquery-ui-timepicker-addon-i18n',
+            'datepicker':'/static/js/lib/bootstrap-3.3.2/js/bootstrap.timepicker.min'
         },
 
         // 路径配置

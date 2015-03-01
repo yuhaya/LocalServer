@@ -31,6 +31,11 @@ func init() {
 	beego.Router("/family/members/stu/post", &controllers.FamilyController{}, "get:EditStuShow")
 	beego.Router("/family/members/stu/delete", &controllers.FamilyController{}, "*:SDelete")
 	beego.Router("/family/members/main", &controllers.FamilyController{}, "*:SetMainUser")
+	beego.Router("/family/members/list", &controllers.FamilyController{}, "get:MemeberList")
+	beego.Router("/family/card/del", &controllers.FamilyController{}, "*:Del")
+
+	beego.Router("/point/create", &controllers.PointController{}, "post:Create")
+	beego.Router("/point", &controllers.PointController{}, "*:CreateShow")
 	grade()
 	class()
 	school()
