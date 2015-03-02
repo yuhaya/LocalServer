@@ -15,10 +15,16 @@ type CardController struct {
 }
 
 func (this *CardController) Index() {
-	this.TplNames = "card/index.tpl"
+	mode := this.BaseController.Mode()
+	if mode == 1 {
+		this.Redirect("/card/list", 302)
+	} else {
+		this.TplNames = "card/index.tpl"
+	}
 }
 
 func (this *CardController) Manager() {
+	this.CacheObj.Put("RUNMODE", 1, 90000000000)
 	device_model := models.DevicesModel{}
 	device_list, num, err := device_model.List()
 	device_model.UpdateAll()
@@ -35,6 +41,7 @@ func (this *CardController) Manager() {
 }
 
 func (this *CardController) Show() {
+
 	card_guid := this.GetString("card")
 	this.init_register(card_guid)
 	this.TplNames = "card/show.tpl"
@@ -83,8 +90,16 @@ func (this *CardController) MemeberList() {
 	members, main_guid := fm.GetMembersByGuid(family_guid)
 
 	guid_slice := make([]string, len(members["users"])+len(members["stus"]))
+
+	count := 0
 	for _, val := range members["users"] {
-		guid_slice = append(guid_slice, val.Guid)
+		guid_slice[count] = val.Guid
+		count++
+	}
+
+	for _, val := range members["stus"] {
+		guid_slice[count] = val.Guid
+		count++
 	}
 	var mc models.MemberCard
 	this.Data["cards"] = mc.GetAllCardsByGuids(guid_slice)
@@ -100,6 +115,7 @@ func (this *CardController) MemeberList() {
  * 添加卡号
  */
 func (this *CardController) Add() {
+
 	guid := this.GetString("guid")
 	card := this.GetString("card")
 	family_guid := this.GetString("family_guid")

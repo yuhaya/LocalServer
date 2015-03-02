@@ -21,10 +21,13 @@ type Devices struct {
 
 func (this *Devices) UpdateVmp(vmp string) (bool, string) {
 	o := orm.NewOrm()
-	err := o.Read(this)
+	err := o.Read(this, "device")
 	if err == nil {
-		this.Vmp = vmp
-		if _, err := o.Update(this); err == nil {
+		_, err2 := o.QueryTable(this).Filter("device", this.Device).Update(orm.Params{
+			"vmp": vmp,
+		})
+
+		if err2 == nil {
 			return true, ""
 		} else {
 			return false, "更新失败"

@@ -26,3 +26,17 @@ func (this *MainController) RightBody() {
 	this.Layout = "main/layout.tpl"
 	this.TplNames = "main/rightbody.tpl"
 }
+func (this *MainController) Mode() {
+	mode := this.BaseController.Mode()
+	this.AjaxReturnFun("1", "success", mode)
+}
+
+func (this *MainController) SetMode() {
+	err := this.BaseController.SetMode()
+
+	if err == nil {
+		this.AjaxReturnFun("1", "success", nil)
+	} else {
+		this.AjaxReturnFun("0", err.Error(), nil)
+	}
+}

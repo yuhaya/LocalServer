@@ -3,7 +3,9 @@ package controllers
 import (
 	// "encoding/json"
 	//	"fmt"
+	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/cache"
 	"github.com/beego/i18n"
 	"regexp"
 	"strings"
@@ -33,6 +35,7 @@ type NestPreparer interface {
 type BaseController struct {
 	beego.Controller
 	i18n.Locale
+	CacheObj cache.Cache
 }
 
 // Prepare implemented Prepare method for baseRouter.
@@ -58,6 +61,13 @@ func (this *BaseController) Prepare() {
 	this.Data["ControllerName"] = strings.ToLower(controllerName)
 	this.Data["MethodName"] = strings.ToLower(methodName)
 
+	bm, err := cache.NewCache("memory", `{"interval":0}`)
+	if err != nil {
+		//缓存系统故障
+	} else {
+		this.CacheObj = bm
+	}
+
 	if controllerName != "Main" && !this.IsAjax() {
 		this.Layout = "main/layout.tpl"
 	}
@@ -65,7 +75,6 @@ func (this *BaseController) Prepare() {
 	if app, ok := this.AppController.(NestPreparer); ok {
 		app.NestPrepare()
 	}
-
 
 }
 
@@ -154,4 +163,26 @@ func (this *BaseController) setLangVer() bool {
 	this.Data["CurLang"] = curLang.Name
 	//	this.Data["RestLangs"] = restLangs
 	return isNeedRedir
+}
+
+func (this *BaseController) Mode() int {
+	mode := 0
+	if this.CacheObj.IsExist("RUNMODE") {
+		mode_val := this.CacheObj.Get("RUNMODE")
+		mode_ass_val, ok := mode_val.(int)
+		if ok {
+			mode = mode_ass_val
+		}
+	} else {
+		this.CacheObj.Put("RUNMODE", mode, 0)
+	}
+	return mode
+}
+
+func (this *BaseController) SetMode() error {
+	mode, _ := this.GetInt("mode")
+	fmt.Printf("\n+++++++++%d++++++++++\n", mode)
+	err := this.CacheObj.Put("RUNMODE", mode, 90000000000)
+	return err
+
 }

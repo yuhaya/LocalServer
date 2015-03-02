@@ -95,17 +95,18 @@ func (this *MemberCard) Delete() bool {
 }
 
 type point_result struct {
-	name    string
-	picture string
-	grade   string
-	class   string
+	Name    string
+	Picture string
+	Grade   string
+	Class   string
+	Mode    int
 }
 
 /**
  * 根据卡号检索学生相关信息
  */
 func (this *MemberCard) GetStuMsg() *point_result {
-	sql := `SELECT s.realname as name,s.picture as picture,g.name,c.name FROM ittr_member_card AS mc INNER JOIN ittr_student AS s
+	sql := `SELECT s.realname as name,s.picture as picture,g.name as grade,c.name as class FROM ittr_member_card AS mc INNER JOIN ittr_students AS s
 	ON mc.guid = s.guid AND mc.type = 0 INNER JOIN ittr_grades
 	AS g ON s.grade_guid = g.guid INNER JOIN ittr_classes AS c ON s.class_guid = c.guid WHERE mc.card = ?`
 	o := orm.NewOrm()

@@ -13,9 +13,10 @@
             background-color: #f5f5f5;
             font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
             color: #333;
+            border-bottom: 2px solid #ccc;
         }
         #main{
-            width: 50%;
+            width: 100%;
             float: left;
         }
         #login_out{
@@ -29,8 +30,6 @@
         }
         #login{
             float: right;
-            height: 40px;
-            width: 40px;
             background-color: #2892BC;
             color:#f5f5f5;
             text-align: center;
@@ -48,21 +47,73 @@
             <p>ID : <span>{{.Name}}</span></p>
         </td>
         <td>
-            &nbsp;&nbsp;
+            当前模式:
+            <select name="" id="mode">
+                <option value="0">
+                    安检模式
+                </option>
+                <option value="1">
+                    注册模式
+                </option>
+            </select>
+
         </td>
         <td style="width: 100px;text-align: right">
+            <div id="login">
+                登陆
+            </div>
         </td>
     </tr>
 </table>
-<div id="login">
-    登陆
-</div>
+
 <script type="application/javascript" src="/static/js/lib/jquery-1.9.1.min.js"></script>
 <script>
     $("#login").click(function () {
         var url = $(this).attr("data-url");
         window.top.frames["right"].location.href = "/user/index";
     })
+
+    var mode_get_url = '{{urlfor "MainController.Mode"}}';
+    var mode_set_url = '{{urlfor "MainController.SetMode"}}';
+
+//    var m = setInterval(GetMode,1000);
+
+    function GetMode(){
+        $.ajax({
+            url:mode_get_url,
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                if(data.Code){
+                    $("#mode").val(data.Data)
+                }else{
+                    window.top.alert("系统异常! 联系管理员!")
+                }
+            }
+        })
+    }
+
+    $("#mode").change(function(){
+        clearInterval(m)
+        var mode = $(this).val();
+        var data = {
+            mode:mode
+        }
+        $.ajax({
+            url:mode_set_url,
+            data:data,
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                if(!data.Code){
+                    window.top.alert("设置失败！请联系管理员！")
+                }else{
+//                    alert("设置成功")
+                }
+                m = setInterval(GetMode,1000);
+            }
+        });
+    });
 </script>
 </body>
 </html>

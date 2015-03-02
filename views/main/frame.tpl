@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
 <html>
 
-<frameset rows="8%,92%" border="0">
+<frameset rows="8%,92%" >
 
     <frame src="{{urlfor "MainController.TopBody"}}"  scrolling="no" noresize="noresize" name="top"/>
 

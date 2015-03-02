@@ -38,6 +38,9 @@ func init() {
 	beego.Router("/point", &controllers.PointController{}, "*:CreateShow")
 
 	beego.Router("/device/get", &controllers.DeviceController{}, "*:Dmess")
+
+	beego.Router("/mode", &controllers.MainController{}, "*:Mode")
+	beego.Router("/mode/post", &controllers.MainController{}, "post:SetMode")
 	grade()
 	class()
 	school()

@@ -72,7 +72,7 @@
         {{ end }}
     </td>
     <td>
-        <button type="button"  data-val="{{$value.Guid}}" data-toggle="modal" data-type="1"  data-target=".input_card"  class="btn btn-primary bcard">绑定卡号</button>
+        <!--<button type="button"  data-val="{{$value.Guid}}" data-toggle="modal" data-type="1"  data-target=".input_card"  class="btn btn-primary bcard">绑定卡号</button>-->
     </td>
 </tr>
 {{end}}

@@ -27,6 +27,20 @@ func (this *PointController) Create() {
 	kind, _ := this.GetInt8("kind")
 	vmp := this.GetString("vmp")
 
+	mode := this.BaseController.Mode()
+	if mode == 1 {
+		if auto_val == 1 {
+			this.AjaxReturnFun("0", "当前处于注册模式中，无法录入到校信息!", nil)
+			return
+		} else {
+			println(err_type, err_auto, card, time_val)
+			urlmsg := make(map[string]string)
+			urlmsg["返回上一页"] = "javascript:history.go(-1)"
+			this.OutputMsg("当前处于注册模式中，无法录入到校信息!", urlmsg)
+			return
+		}
+	}
+
 	if err_type != nil || err_auto != nil || card == "" || time_val == "" {
 		if auto_val == 1 {
 			this.AjaxReturnFun("0", "参数信息错误!", nil)
@@ -40,10 +54,17 @@ func (this *PointController) Create() {
 		}
 	}
 
-	var de models.Devices
-	de.Device = device
-	de.Kind = kind
-	flag, msg := de.UpdateVmp(vmp)
+	flag := true
+	msg := ""
+	if device != "" {
+		fmt.Println("sdsssssssssssssssssssssssssssss%s", device)
+		var de models.Devices
+		de.Device = device
+		de.Kind = kind
+		flag_tmp, msg_tmp := de.UpdateVmp(vmp)
+		flag = flag_tmp
+		msg = msg_tmp
+	}
 
 	var att models.Attendances
 	att.Auto = auto_val
@@ -64,7 +85,6 @@ func (this *PointController) Create() {
 	school_model := models.SchoolModel{}
 	att.SchoolGuid = school_model.GetSchoolGuid()
 	att.Type = type_val
-	fmt.Printf("\n==%#v==\n", att)
 	flag2, _, msg2 := att.Insert()
 
 	if auto_val == 1 {
@@ -75,6 +95,7 @@ func (this *PointController) Create() {
 		var mc models.MemberCard
 		mc.Card = card
 		res := mc.GetStuMsg()
+		res.Mode = mode
 		if res != nil {
 			this.AjaxReturnFun("1", "success", res)
 			return
