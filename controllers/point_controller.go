@@ -27,6 +27,7 @@ func (this *PointController) Create() {
 	kind, _ := this.GetInt8("kind")
 	vmp := this.GetString("vmp")
 
+	this.BaseController.SetRegCard()
 	mode := this.BaseController.Mode()
 	if mode == 1 {
 		if auto_val == 1 {

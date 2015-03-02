@@ -40,6 +40,7 @@ func init() {
 	beego.Router("/device/get", &controllers.DeviceController{}, "*:Dmess")
 
 	beego.Router("/mode", &controllers.MainController{}, "*:Mode")
+	beego.Router("/regcode", &controllers.MainController{}, "*:Card")
 	beego.Router("/mode/post", &controllers.MainController{}, "post:SetMode")
 	grade()
 	class()

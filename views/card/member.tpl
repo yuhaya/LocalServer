@@ -151,4 +151,24 @@
 
 </div>
 
+<script>
+var mode_get_url = '{{urlfor "MainController.Card"}}';
+
+var m = setInterval(GetCard,1000);
+
+function GetCard(){
+    $.ajax({
+        url:mode_get_url,
+        type:"post",
+        dataType:"json",
+        success:function(data){
+            if(data.Code){
+                $("#card").val(data.Data)
+            }else{
+//                window.top.alert("系统异常! 联系管理员!")
+            }
+        }
+    })
+}
+</script>
 

@@ -31,6 +31,11 @@ func (this *MainController) Mode() {
 	this.AjaxReturnFun("1", "success", mode)
 }
 
+func (this *MainController) Card() {
+	card := this.BaseController.RegCard()
+	this.AjaxReturnFun("1", "success", card)
+}
+
 func (this *MainController) SetMode() {
 	err := this.BaseController.SetMode()
 

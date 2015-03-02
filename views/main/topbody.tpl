@@ -76,7 +76,7 @@
     var mode_get_url = '{{urlfor "MainController.Mode"}}';
     var mode_set_url = '{{urlfor "MainController.SetMode"}}';
 
-//    var m = setInterval(GetMode,1000);
+    var m = setInterval(GetMode,1000);
 
     function GetMode(){
         $.ajax({

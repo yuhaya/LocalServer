@@ -174,7 +174,7 @@ func (this *BaseController) Mode() int {
 			mode = mode_ass_val
 		}
 	} else {
-		this.CacheObj.Put("RUNMODE", mode, 0)
+		this.CacheObj.Put("RUNMODE", mode, 9999999999999)
 	}
 	return mode
 }
@@ -183,6 +183,28 @@ func (this *BaseController) SetMode() error {
 	mode, _ := this.GetInt("mode")
 	fmt.Printf("\n+++++++++%d++++++++++\n", mode)
 	err := this.CacheObj.Put("RUNMODE", mode, 90000000000)
+	return err
+
+}
+
+func (this *BaseController) RegCard() string {
+	mode := ""
+	if this.CacheObj.IsExist("CARDREG") {
+		mode_val := this.CacheObj.Get("CARDREG")
+		mode_ass_val, ok := mode_val.(string)
+		if ok {
+			mode = mode_ass_val
+		}
+	} else {
+		this.CacheObj.Put("CARDREG", mode, 999999999999)
+	}
+	return mode
+}
+
+func (this *BaseController) SetRegCard() error {
+	mode := this.GetString("card")
+	fmt.Printf("\n+++++++++%d++++++++++\n", mode)
+	err := this.CacheObj.Put("CARDREG", mode, 90000000000)
 	return err
 
 }
