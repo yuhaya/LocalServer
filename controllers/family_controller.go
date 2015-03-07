@@ -36,6 +36,80 @@ func (this *FamilyController) Index() {
 	this.TplNames = "family/index.tpl"
 }
 
+/**
+ * 删除家庭
+ */
+func (this *FamilyController) Delete() {
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = this.Referer()
+	family_guid := this.GetString("guid")
+	var f models.Families
+	flag := f.DeleteFamily(family_guid)
+	if flag {
+		this.OutputMsg("删除成功！", urlmsg)
+	} else {
+		this.OutputMsg("删除失败！", urlmsg)
+	}
+}
+
+/**
+ * 家庭成员通知绑定
+ */
+func (this *FamilyController) Notice() {
+	family_guid := this.GetString("guid")
+	var fm models.FamilyMember
+	cardslink := fm.GetCardsByGuid(family_guid)
+	fmt.Printf("\n%#s\n", cardslink)
+	this.Data["cardlink"] = cardslink
+	this.Data["family_guid"] = family_guid
+	var fm_model models.FamiliyModel
+	fms, _ := fm_model.GetMembersByGuid(family_guid)
+	this.Data["fms"] = fms
+	this.TplNames = "family/notice.tpl"
+
+}
+
+/**
+ * 家庭成员通知绑定
+ */
+func (this *FamilyController) NoticeBind() {
+	user_guid := this.GetString("notice")
+	card := this.GetString("card")
+	var cr models.CardReceiver
+	cr.Card = card
+	cr.Guid = user_guid
+	cr.Type = models.GetMemType(user_guid)
+	var school models.SchoolModel
+	cr.SchoolGuid = school.GetSchoolGuid()
+	flag, msg := cr.Add()
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = this.Referer()
+	if flag {
+		this.OutputMsg("添加成功！", urlmsg)
+	} else {
+		this.OutputMsg(msg, urlmsg)
+	}
+}
+
+/**
+ * 删除通知绑定
+ */
+func (this *FamilyController) NoticeDeleteBind() {
+	guid := this.GetString("guid")
+	card := this.GetString("card")
+	var cr models.CardReceiver
+	cr.Card = card
+	cr.Guid = guid
+	flag, msg := cr.Del()
+	urlmsg := make(map[string]string)
+	urlmsg["返回上一页"] = this.Referer()
+	if flag {
+		this.OutputMsg("删除成功！", urlmsg)
+	} else {
+		this.OutputMsg(msg, urlmsg)
+	}
+}
+
 func (this *FamilyController) Add() {
 
 	this.TplNames = "family/add.tpl"
@@ -79,7 +153,7 @@ func (this *FamilyController) AddSubmit() {
 	succ := familiy.AddFamily(&family_model, &user_model, &family_member)
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+	urlmsg["返回上一页"] = this.Referer()
 	urlmsg["回到列表页"] = "/family"
 	urlmsg["重新添加一个"] = "/family/add"
 	if succ {
@@ -113,7 +187,7 @@ func (this *FamilyController) EditSubmit() {
 	flag := fm.UpdateFamilyNameByGuid(family_guid, family_name)
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+	urlmsg["返回上一页"] = this.Referer()
 	urlmsg["回到列表页"] = "/family"
 
 	if flag {
@@ -175,7 +249,7 @@ func (this *FamilyController) AddMember() {
 	guid := this.GetString("Guid")
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+	urlmsg["返回上一页"] = this.Referer()
 
 	if memeber_type == "stu" {
 
@@ -313,7 +387,7 @@ func (this *FamilyController) EditUserShow() {
 func (this *FamilyController) UDelete() {
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+	urlmsg["返回上一页"] = this.Referer()
 
 	family_guid := this.GetString("family_guid")
 	guid := this.GetString("guid")
@@ -379,7 +453,7 @@ func (this *FamilyController) EditStuShow() {
  */
 func (this *FamilyController) SDelete() {
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+	urlmsg["返回上一页"] = this.Referer()
 
 	family_guid := this.GetString("family_guid")
 	guid := this.GetString("guid")
@@ -429,7 +503,7 @@ func (this *FamilyController) SetMainUser() {
 	guid := this.GetString("guid")
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "javascript:history.go(-1)"
+	urlmsg["返回上一页"] = this.Referer()
 
 	var fm models.Families
 	flag := fm.UpdateMain(family_guid, guid)
@@ -447,14 +521,14 @@ func (this *FamilyController) Del() {
 
 	guid := this.GetString("guid")
 	card := this.GetString("card")
-	fm := this.GetString("family_guid")
+	//	fm := this.GetString("family_guid")
 	var mem_card models.MemberCard
 	mem_card.Card = card
 	mem_card.Guid = guid
 	flag := mem_card.Delete()
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "/family/members?family_guid=" + fm
+	urlmsg["返回上一页"] = this.Referer()
 
 	if flag {
 		this.OutputMsg("删除成功! ", urlmsg)

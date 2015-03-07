@@ -30,8 +30,8 @@
             <input type="button" onclick="location.href='{{urlfor "FamilyController.ManagerMember"}}?guid={{$value.guid}}'" value="管理家庭成员" class="btn btn-primary"/>
             <input type="button"  onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.guid}}'"  value="家庭成员关系" class="btn btn-primary"/>
             <input type="button"  onclick="location.href='{{urlfor "FamilyController.MemeberList"}}?family_guid={{$value.guid}}'"  value="家庭成员卡号绑定" class="btn btn-primary"/>
-            <input type="button"  onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.guid}}'"   value="家庭成员卡号通知绑定" class="btn btn-primary"/>
-            <input type="button"  onclick="location.href='{{urlfor "FamilyController.EditFamily"}}?guid={{$value.guid}}'"  value="删除" class="btn btn-danger"/>
+            <input type="button"  onclick="location.href='{{urlfor "FamilyController.Notice"}}?guid={{$value.guid}}'"   value="家庭成员卡号通知绑定" class="btn btn-primary"/>
+            <input type="button"  data-href="{{urlfor "FamilyController.Delete"}}?guid={{$value.guid}}"  value="删除" class="btn btn-danger DelFm"/>
         </td>
     </tr>
     {{end}}

@@ -23,6 +23,11 @@ func init() {
 	beego.Router("/family/add", &controllers.FamilyController{}, "get:Add;post:AddSubmit")
 	beego.Router("/family/edit", &controllers.FamilyController{}, "get:EditFamily;post:EditSubmit")
 	beego.Router("/family/members", &controllers.FamilyController{}, "get:ManagerMember")
+	beego.Router("/family/delete", &controllers.FamilyController{}, "*:Delete")
+	beego.Router("/family/notice", &controllers.FamilyController{}, "*:Notice")
+	beego.Router("/family/notice/bind", &controllers.FamilyController{}, "*:NoticeBind")
+	beego.Router("/family/notice/delete", &controllers.FamilyController{}, "*:NoticeDeleteBind")
+
 	beego.Router("/family/members/user", &controllers.FamilyController{}, "get:AddMemberShow;post:AddMember")
 	beego.Router("/family/members/parent", &controllers.FamilyController{}, "get:ShowUser")
 	beego.Router("/family/members/parent/post", &controllers.FamilyController{}, "get:EditUserShow")

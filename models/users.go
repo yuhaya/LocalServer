@@ -73,3 +73,19 @@ func (this *Users) DeleteUser(guid string, fm string) bool {
 		return false
 	}
 }
+
+/**
+ * 判断用户身份
+ */
+func GetMemType(guid string) int8 {
+	o := orm.NewOrm()
+	var user Users
+	user.Guid = guid
+	err := o.Read(&user, "guid")
+
+	if err == nil {
+		return 1 //代表家长
+	} else {
+		return 0 //代表学生
+	}
+}

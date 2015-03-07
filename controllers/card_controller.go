@@ -118,10 +118,10 @@ func (this *CardController) Add() {
 
 	guid := this.GetString("guid")
 	card := this.GetString("card")
-	family_guid := this.GetString("family_guid")
+	//	family_guid := this.GetString("family_guid")
 	type_num, _ := this.GetInt8("type")
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "/card/members?family_guid=" + family_guid
+	urlmsg["返回上一页"] = this.Referer()
 
 	if guid != "" && card != "" {
 		var mem_card models.MemberCard
@@ -150,14 +150,14 @@ func (this *CardController) Del() {
 
 	guid := this.GetString("guid")
 	card := this.GetString("card")
-	fm := this.GetString("family_guid")
+	//	fm := this.GetString("family_guid")
 	var mem_card models.MemberCard
 	mem_card.Card = card
 	mem_card.Guid = guid
 	flag := mem_card.Delete()
 
 	urlmsg := make(map[string]string)
-	urlmsg["返回上一页"] = "/card/members?family_guid=" + fm
+	urlmsg["返回上一页"] = this.Referer()
 
 	if flag {
 		this.OutputMsg("删除成功! ", urlmsg)

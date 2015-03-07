@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -14,6 +15,64 @@ type Families struct {
 	Guid       string `orm:"unique;size(50)"`
 	FirstGuid  string `orm:"size(50)"`
 	SchoolGuid string `orm:"size(50)"`
+}
+
+/**
+ * 删除家庭
+ */
+func (this *Families) DeleteFamily(guid string) bool {
+	o := orm.NewOrm()
+	err := o.Begin()
+	if err != nil {
+		return false
+	}
+	_, err2 := o.QueryTable(this).Filter("guid", guid).Delete()
+	var fms []FamilyMember
+	_, err3 := o.QueryTable(new(FamilyMember)).Filter("family_guid", guid).All(&fms)
+
+	stus := make([]string, 0, 20)
+	pars := make([]string, 0, 20)
+
+	for _, fm := range fms {
+		if fm.Type == 0 {
+			stus = append(stus, "'"+fm.MemberGuid+"'")
+		} else {
+			pars = append(pars, "'"+fm.MemberGuid+"'")
+		}
+	}
+
+	stus_str := strings.Join(stus, ",")
+	pars_str := strings.Join(pars, ",")
+
+	stu_sql := "DELETE FROM ittr_students WHERE guid in (" + stus_str + ")"
+	_, err4 := o.Raw(stu_sql).Exec()
+
+	par_sql := "DELETE FROM ittr_users WHERE guid in (" + pars_str + ")"
+	_, err5 := o.Raw(par_sql).Exec()
+
+	fr_sql := "DELETE FROM ittr_family_relation WHERE user_guid in (" + pars_str + ") or stu_guid in (" + stus_str + ")"
+	_, err6 := o.Raw(fr_sql).Exec()
+
+	mc_sql := "DELETE FROM ittr_member_card WHERE guid in (" + pars_str + ") or guid in (" + stus_str + ")"
+	_, err7 := o.Raw(mc_sql).Exec()
+
+	cr_sql := "DELETE FROM ittr_card_receiver WHERE guid in (" + pars_str + ") or guid in (" + stus_str + ")"
+	_, err8 := o.Raw(cr_sql).Exec()
+
+	if err2 == nil && err3 == nil && err4 == nil && err5 == nil && err6 == nil && err7 == nil && err8 == nil {
+		err9 := o.Commit()
+		if err9 == nil {
+			return true
+		} else {
+			return false
+		}
+	} else {
+		err9 := o.Rollback()
+		if err9 != nil {
+			//日志记录
+		}
+		return false
+	}
 }
 
 /**
@@ -266,6 +325,57 @@ func (this *FamiliyModel) GetMembersByGuid(guid string) (map[string][]*result, s
 
 	return res, first_guid
 
+}
+
+/**
+ * 因为卡仅仅绑定在学生上，所以目前仅仅关联学生信息
+ */
+type cardReceiver struct {
+	Guid     string
+	Name     string
+	Identify int8 //0代表学生 1代表家长
+}
+type cardsLink struct {
+	Card        string
+	Member_guid string
+	Real_name   string
+	Recevie     []cardReceiver
+}
+
+func (this *FamilyMember) GetCardsByGuid(guid string) []cardsLink {
+
+	o := orm.NewOrm()
+	sql := `SELECT mc.card ,fm.member_guid,s.realname as real_name FROM ittr_member_card AS mc INNER JOIN
+	ittr_family_member AS fm ON mc.guid = fm.member_guid LEFT JOIN
+	ittr_students AS s ON mc.guid = s.guid WHERE fm.family_guid = ?`
+	var cardslinks []cardsLink
+	o.Raw(sql, guid).QueryRows(&cardslinks)
+
+	for k, v := range cardslinks {
+
+		card_val := v.Card
+		tmpsql_par := `SELECT u.realname as name,u.guid FROM ittr_card_receiver AS cr INNER JOIN ittr_users AS u ON cr.guid = u.guid WHERE cr.card = ?`
+		var cardReceiversPar []cardReceiver
+		o.Raw(tmpsql_par, card_val).QueryRows(&cardReceiversPar)
+		for sk, _ := range cardReceiversPar {
+			cardReceiversPar[sk].Identify = 1
+			cardslinks[k].Recevie = append(cardslinks[k].Recevie, cardReceiversPar[sk])
+		}
+
+		tmpsql_stu := `SELECT u.realname as name,u.guid FROM ittr_card_receiver AS cr INNER JOIN ittr_students AS u ON cr.guid = u.guid WHERE cr.card = ?`
+		var cardReceiversStu []cardReceiver
+		o.Raw(tmpsql_stu, card_val).QueryRows(&cardReceiversStu)
+		for sk, _ := range cardReceiversStu {
+			cardReceiversStu[sk].Identify = 0
+			fmt.Printf("\nzzzzzzzzzzz%#szzzzzzzz\n", cardReceiversStu[sk])
+			cardslinks[k].Recevie = append(cardslinks[k].Recevie, cardReceiversStu[sk])
+		}
+
+		//		cardslinks[k].Recevie = append(cardReceiversPar, cardReceiversStu)
+
+	}
+
+	return cardslinks
 }
 
 /**

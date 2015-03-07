@@ -78,6 +78,11 @@ func (this *BaseController) Prepare() {
 
 }
 
+func (this *BaseController) Referer() string {
+	req_url := this.Ctx.Request.Header.Get("Referer")
+	return req_url
+}
+
 func (this *BaseController) AjaxReturnFun(code string, msg string, data interface{}) {
 	m := AjaxReturn{code, msg, data}
 	this.Data["json"] = &m

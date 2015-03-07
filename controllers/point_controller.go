@@ -8,7 +8,6 @@ package controllers
 
 import (
 	"LocalServer/models"
-	"fmt"
 	"time"
 )
 
@@ -36,7 +35,7 @@ func (this *PointController) Create() {
 		} else {
 			println(err_type, err_auto, card, time_val)
 			urlmsg := make(map[string]string)
-			urlmsg["返回上一页"] = "javascript:history.go(-1)"
+			urlmsg["返回上一页"] = this.Referer()
 			this.OutputMsg("当前处于注册模式中，无法录入到校信息!", urlmsg)
 			return
 		}
@@ -49,7 +48,7 @@ func (this *PointController) Create() {
 		} else {
 			println(err_type, err_auto, card, time_val)
 			urlmsg := make(map[string]string)
-			urlmsg["返回上一页"] = "javascript:history.go(-1)"
+			urlmsg["返回上一页"] = this.Referer()
 			this.OutputMsg("参数信息错误", urlmsg)
 			return
 		}
@@ -58,7 +57,6 @@ func (this *PointController) Create() {
 	flag := true
 	msg := ""
 	if device != "" {
-		fmt.Println("sdsssssssssssssssssssssssssssss%s", device)
 		var de models.Devices
 		de.Device = device
 		de.Kind = kind
@@ -77,7 +75,7 @@ func (this *PointController) Create() {
 			return
 		} else {
 			urlmsg := make(map[string]string)
-			urlmsg["返回上一页"] = "javascript:history.go(-1)"
+			urlmsg["返回上一页"] = this.Referer()
 			this.OutputMsg("时间解析错误", urlmsg)
 			return
 		}
@@ -108,7 +106,7 @@ func (this *PointController) Create() {
 	} else {
 		//手动输入
 		urlmsg := make(map[string]string)
-		urlmsg["返回上一页"] = "javascript:history.go(-1)"
+		urlmsg["返回上一页"] = this.Referer()
 		if flag && flag2 {
 			this.OutputMsg("添加成功！", urlmsg)
 		} else {
